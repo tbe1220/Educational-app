@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fdfbf7;
+  --foreground: #333333;
+  --pop-red: #ff5e5e;
+  --pop-blue: #3ba4ff;
+  --pop-yellow: #ffce33;
+  --pop-green: #4cd964;
+  --pop-orange: #ff9500;
+  --pop-purple: #af52de;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-pop-red: var(--pop-red);
+  --color-pop-blue: var(--pop-blue);
+  --color-pop-yellow: var(--pop-yellow);
+  --color-pop-green: var(--pop-green);
+  --color-pop-orange: var(--pop-orange);
+  --color-pop-purple: var(--pop-purple);
+  --font-sans: var(--font-m-plus-rounded), "M PLUS Rounded 1c", sans-serif;
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
