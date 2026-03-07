@@ -19,7 +19,7 @@ type QuestionType = 'math' | 'language' | 'english';
 
 export default function BattleArena() {
     const router = useRouter();
-    const { hp, maxHp, points, level, addPoints, addLevel, takeDamage } = usePlayerStore();
+    const { hp, maxHp, points, level, addPoints, addLevel, takeDamage, enemyAttackTime } = usePlayerStore();
 
     const [monster, setMonster] = useState<Monster | null>(null);
     const [monsterHp, setMonsterHp] = useState(0);
@@ -59,7 +59,8 @@ export default function BattleArena() {
 
     const startTimer = () => {
         clearTimer();
-        setTimeRemaining(20); // 20 seconds for kids
+        // Use user-defined attack time (default 20)
+        setTimeRemaining(enemyAttackTime || 20);
         timerRef.current = setInterval(() => {
             setTimeRemaining((prev) => {
                 if (prev <= 1) {

@@ -32,9 +32,15 @@ const TRACING_QUESTIONS: LanguageQuestion[] = [
     // For the sake of choice-based engine compatibility initially:
     { id: 't1', category: 'tracing', questionStr: '「りんご」の さいしょの もじは？', correctAnswer: 'り', choices: ['り', 'ん', 'ご', 'み'] },
     { id: 't2', category: 'tracing', questionStr: '「くるま」の さいごの もじは？', correctAnswer: 'ま', choices: ['ま', 'る', 'く', 'た'] },
+    { id: 't3', category: 'tracing', questionStr: '「でんしゃ」の さいしょの もじは？', correctAnswer: 'で', choices: ['で', 'ん', 'し', 'や'] },
 ];
 
-const ALL_QUESTIONS = [...BUG_QUESTIONS, ...COUNTRY_QUESTIONS, ...SAFETY_QUESTIONS, ...TRACING_QUESTIONS];
+const VEHICLE_QUESTIONS: LanguageQuestion[] = [
+    { id: 'v1', category: 'tracing', questionStr: 'たくさんの ひとを のせて はしる のりものは？', correctAnswer: 'でんしゃ', choices: ['でんしゃ', 'じてんしゃ', 'ひこうき', 'ふね'] },
+    { id: 'v2', category: 'tracing', questionStr: 'そらをとぶ おおきな のりものは？', correctAnswer: 'ひこうき', choices: ['ひこうき', 'くるま', 'ふね', 'ろけっと'] },
+];
+
+const ALL_QUESTIONS = [...BUG_QUESTIONS, ...COUNTRY_QUESTIONS, ...SAFETY_QUESTIONS, ...TRACING_QUESTIONS, ...VEHICLE_QUESTIONS];
 
 import { usePlayerStore } from "@/store/usePlayerStore";
 
@@ -98,42 +104,63 @@ const EXTRA_SETS: Record<string, WordSet> = {
 
 const ALL_SETS = { ...WORD_SETS, ...EXTRA_SETS };
 
+let lastLanguageQuestionStr = "";
+
 export const generateLanguageQuestion = (): LanguageQuestion => {
     const difficulty = usePlayerStore.getState().difficulty;
     const categories = getCategories(difficulty);
-    const categoryKey = categories[Math.floor(Math.random() * categories.length)];
 
-    // If the category is one of the new 'WordSet' categories
-    if (categoryKey in ALL_SETS) {
-        const set = ALL_SETS[categoryKey as keyof typeof ALL_SETS];
-        const item = set.items[Math.floor(Math.random() * set.items.length)];
+    let chosenQuestion: LanguageQuestion | null = null;
+    let attempts = 0;
 
-        // Generate choices (e.g., correct answer + 3 random incorrect from the same set or other sets)
-        const otherItems = set.items.filter(i => i.text !== item.text);
-        const incorrectChoices = otherItems.sort(() => Math.random() - 0.5).slice(0, 3).map(i => i.text);
-        const choices = [item.text, ...incorrectChoices].sort(() => Math.random() - 0.5);
+    while (attempts < 5) {
+        const categoryKey = categories[Math.floor(Math.random() * categories.length)];
 
-        return {
-            id: `${categoryKey}-${item.text}`, // Unique ID
-            category: categoryKey as LanguageQuestionCategory,
-            questionStr: `${set.questionPrompt} ${item.emoji}`,
-            correctAnswer: item.text,
-            choices: choices,
-            image: undefined, // Or use emoji as image if applicable
-        };
-    } else {
-        // Fallback to existing ALL_QUESTIONS for 'bugs', 'countries', 'safety', 'tracing'
-        // This assumes 'normal' difficulty or categories not covered by new sets
-        const filteredQuestions = ALL_QUESTIONS.filter(q => categories.includes(q.category));
-        const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
-        const q = filteredQuestions[randomIndex];
+        // If the category is one of the new 'WordSet' categories
+        if (categoryKey in ALL_SETS) {
+            const set = ALL_SETS[categoryKey as keyof typeof ALL_SETS];
+            const item = set.items[Math.floor(Math.random() * set.items.length)];
 
-        // Shuffle choices
-        const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
+            // Generate choices (e.g., correct answer + 3 random incorrect from the same set or other sets)
+            const otherItems = set.items.filter(i => i.text !== item.text);
+            const incorrectChoices = otherItems.sort(() => Math.random() - 0.5).slice(0, 3).map(i => i.text);
+            const choices = [item.text, ...incorrectChoices].sort(() => Math.random() - 0.5);
 
-        return {
-            ...q,
-            choices: shuffledChoices,
-        };
+            chosenQuestion = {
+                id: `${categoryKey}-${item.text}`, // Unique ID
+                category: categoryKey as LanguageQuestionCategory,
+                questionStr: `${set.questionPrompt} ${item.emoji}`,
+                correctAnswer: item.text,
+                choices: choices,
+                image: undefined, // Or use emoji as image if applicable
+            };
+        } else {
+            // Fallback to existing ALL_QUESTIONS for 'bugs', 'countries', 'safety', 'tracing'
+            // This assumes 'normal' difficulty or categories not covered by new sets
+            const filteredQuestions = ALL_QUESTIONS.filter(q => categories.includes(q.category));
+            const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+            const q = filteredQuestions[randomIndex];
+
+            // Shuffle choices
+            const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
+
+            chosenQuestion = {
+                ...q,
+                choices: shuffledChoices,
+            };
+        }
+
+        if (chosenQuestion.questionStr !== lastLanguageQuestionStr) {
+            break;
+        }
+        attempts++;
     }
+
+    if (chosenQuestion) {
+        lastLanguageQuestionStr = chosenQuestion.questionStr;
+        return chosenQuestion;
+    }
+    // Fallback if loop fails
+    lastLanguageQuestionStr = ALL_QUESTIONS[0].questionStr;
+    return ALL_QUESTIONS[0];
 };

@@ -10,7 +10,7 @@ import LoginRegister from "@/components/profile/LoginRegister";
 
 export default function TopPage() {
   const router = useRouter();
-  const { hp, maxHp, points, level, name, pin, userId, difficulty, setDifficulty } = usePlayerStore();
+  const { hp, maxHp, points, level, name, pin, userId, difficulty, setDifficulty, enemyAttackTime, setEnemyAttackTime } = usePlayerStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -84,18 +84,32 @@ export default function TopPage() {
           </div>
         </div>
 
-        {/* Settings Button */}
-        <button
-          onClick={() => {
-            // playSound('click'); // Assuming playSound is defined elsewhere or will be added
-            const cycle = { 'easy': 'normal', 'normal': 'hard', 'hard': 'easy' } as const;
-            setDifficulty(cycle[difficulty]);
-          }}
-          className="bg-white/80 p-3 rounded-full shadow-md text-gray-500 hover:text-pop-blue transition-colors"
-          title="むずかしさを かえる"
-        >
-          <Settings className="w-8 h-8" />
-        </button>
+        {/* Settings Buttons Group */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              const cycles = [10, 15, 20, 30];
+              const idx = cycles.indexOf(enemyAttackTime);
+              setEnemyAttackTime(cycles[(idx + 1) % cycles.length] || 20);
+            }}
+            className="bg-white/80 p-3 rounded-2xl shadow-md text-gray-500 hover:text-pop-red transition-colors flex flex-col items-center justify-center font-black min-w-[4rem]"
+            title="てきの こうげきじかん (びょう)"
+          >
+            <span className="text-xs text-pop-red">じかん</span>
+            <span>{enemyAttackTime}s</span>
+          </button>
+
+          <button
+            onClick={() => {
+              const cycle = { 'easy': 'normal', 'normal': 'hard', 'hard': 'easy' } as const;
+              setDifficulty(cycle[difficulty]);
+            }}
+            className="bg-white/80 p-3 rounded-full shadow-md text-gray-500 hover:text-pop-blue transition-colors flex items-center justify-center"
+            title="むずかしさを かえる"
+          >
+            <Settings className="w-8 h-8" />
+          </button>
+        </div>
       </div>
 
       <div className="z-10 w-full max-w-4xl mt-24 flex flex-col items-center gap-12">

@@ -19,11 +19,11 @@ export default function MyRoomPage() {
     const roomRef = useRef<HTMLDivElement>(null);
 
     const handleDragEnd = (instanceId: string, event: any, info: any) => {
-        // Only update if it dropped inside a reasonable bound, for simplicity we just update relative position
-        // info.point contains x/y
-        // We would need to calculate relative position to room container for exact persistence
-        // For now, let's keep it simple with framer-motion's layout/drag coordinates if possible, or just local state.
         playSound('click');
+        const item = roomItems.find(i => i.id === instanceId);
+        if (item) {
+            moveRoomItem(instanceId, item.x + info.offset.x, item.y + info.offset.y);
+        }
     };
 
     const spawnFurniture = (itemId: string) => {

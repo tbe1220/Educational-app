@@ -13,9 +13,11 @@ interface PlayerState {
     points: number;
     level: number;
     equippedWeaponId: string | null;
+    enemyAttackTime: number;
 
     setProfile: (userId: string, pin: string, name: string, difficulty: Difficulty) => void;
     setDifficulty: (difficulty: Difficulty) => void;
+    setEnemyAttackTime: (time: number) => void;
     addPoints: (amount: number) => void;
     removePoints: (amount: number) => boolean;
     addLevel: (amount: number) => void;
@@ -39,6 +41,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => {
             if (updates.equippedWeaponId !== undefined) dbUpdates.equipped_weapon_id = updates.equippedWeaponId;
             if (updates.difficulty !== undefined) dbUpdates.difficulty = updates.difficulty;
 
+            // We might also add a new column `enemy_attack_time` to profiles later, but for now it can be local or we can sync if the column exists.
+            // Assuming no column is added yet, let's just update local state and avoid db errors if it's not present. We'll skip DB sync for enemyAttackTime unless added.
+
             await supabase.from('profiles').update(dbUpdates).eq('id', userId);
         } catch (err) {
             console.error('Failed to sync state', err);
@@ -55,12 +60,17 @@ export const usePlayerStore = create<PlayerState>((set, get) => {
         points: 0,
         level: 1,
         equippedWeaponId: null,
+        enemyAttackTime: 20,
 
         setProfile: (userId, pin, name, difficulty) => set({ userId, pin, name, difficulty }),
 
         setDifficulty: (difficulty) => {
             set({ difficulty });
             syncToDb({ difficulty });
+        },
+
+        setEnemyAttackTime: (enemyAttackTime) => {
+            set({ enemyAttackTime });
         },
 
         takeDamage: (amount) => set((state) => {

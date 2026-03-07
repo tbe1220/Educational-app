@@ -47,13 +47,28 @@ export async function POST(req: Request) {
         const response = await result.response;
         const text = response.text();
 
-        // Extract JSON from potential markdown blocks
-        const jsonMatch = text.match(/\{[\s\S]*?\}/);
-        if (!jsonMatch) {
-            return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
+        // Extract JSON robustly from markdown or plain text
+        let jsonStr = text;
+        const jsonBlockMatch = text.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonBlockMatch) {
+            jsonStr = jsonBlockMatch[1];
+        } else {
+            // Fallback: Find outermost '{' and '}'
+            const start = text.indexOf('{');
+            const end = text.lastIndexOf('}');
+            if (start !== -1 && end !== -1 && end > start) {
+                jsonStr = text.substring(start, end + 1);
+            }
         }
 
-        const itemData = JSON.parse(jsonMatch[0]);
+        if (!jsonStr) {
+            return NextResponse.json({ error: "Failed to parse AI response: No JSON found" }, { status: 500 });
+        }
+
+        // Additional cleanup for Gemini quirks
+        jsonStr = jsonStr.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
+
+        const itemData = JSON.parse(jsonStr);
 
         return NextResponse.json(itemData);
 

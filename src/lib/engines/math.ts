@@ -149,6 +149,8 @@ const generateClock = (difficulty: string): MathQuestion => {
         hintDots: undefined
     };
 };
+let lastMathQuestionStr = "";
+
 // Generate a random math question based on selected difficulty
 export const generateMathQuestion = (): MathQuestion => {
     const difficulty = usePlayerStore.getState().difficulty;
@@ -164,18 +166,31 @@ export const generateMathQuestion = (): MathQuestion => {
         types = ['addition', 'subtraction', 'multiplication', 'division', 'clock'];
     }
 
-    const type = types[Math.floor(Math.random() * types.length)];
+    let type: MathQuestionType;
+    let question: MathQuestion | null = null;
+    let attempts = 0;
 
-    switch (type) {
-        case 'addition':
-            return generateAddition(difficulty);
-        case 'subtraction':
-            return generateSubtraction(difficulty);
-        case 'multiplication':
-            return generateMultiplication(difficulty);
-        case 'division':
-            return generateDivision(difficulty);
-        case 'clock':
-            return generateClock(difficulty);
+    while (attempts < 5) {
+        type = types[Math.floor(Math.random() * types.length)];
+        switch (type) {
+            case 'addition': question = generateAddition(difficulty); break;
+            case 'subtraction': question = generateSubtraction(difficulty); break;
+            case 'multiplication': question = generateMultiplication(difficulty); break;
+            case 'division': question = generateDivision(difficulty); break;
+            case 'clock': question = generateClock(difficulty); break;
+        }
+        if (question && question.questionStr !== lastMathQuestionStr) {
+            break;
+        }
+        attempts++;
     }
+
+    if (question) {
+        lastMathQuestionStr = question.questionStr;
+        return question;
+    }
+    // Fallback if loop fails
+    const fallback = generateAddition(difficulty);
+    lastMathQuestionStr = fallback.questionStr;
+    return fallback;
 };
