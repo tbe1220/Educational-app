@@ -1,3 +1,8 @@
+// Initialize voices early so they are loaded when needed
+if (typeof window !== "undefined" && window.speechSynthesis) {
+    window.speechSynthesis.getVoices();
+}
+
 export const playSound = (type: 'correct' | 'wrong' | 'attack' | 'damage' | 'levelUp' | 'click') => {
     // In a real application, we would load actual audio files and play them here.
     // For the sake of this foundation, we'll log or use minimal browser beeps if possible,
@@ -56,9 +61,11 @@ export const speakEnglish = (text: string) => {
     utterance.rate = 0.9; // Slightly slower for kids
     utterance.pitch = 1.1; // Slightly higher pitched, friendly
 
-    // Attempt to find a US English female/childish voice if possible
+    // Attempt to find a high quality English voice (native speakers)
     const voices = window.speechSynthesis.getVoices();
-    const enVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google'));
+    const enVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) ||
+        voices.find(v => v.lang.startsWith('en-') && (v.name.includes('US') || v.name.includes('UK'))) ||
+        voices.find(v => v.lang.startsWith('en'));
     if (enVoice) {
         utterance.voice = enVoice;
     }
@@ -74,5 +81,15 @@ export const speakJapanese = (text: string) => {
     utterance.lang = 'ja-JP';
     utterance.rate = 0.9;
     utterance.pitch = 1.1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const jaVoice = voices.find(v => v.lang === 'ja-JP' && v.name.includes('Google')) ||
+        voices.find(v => v.lang === 'ja-JP' && (v.name.includes('Kyoko') || v.name.includes('Otoya') || v.name.includes('Hattori') || v.name.includes('Mei') || v.name.includes('Siri'))) ||
+        voices.find(v => v.lang === 'ja-JP');
+
+    if (jaVoice) {
+        utterance.voice = jaVoice;
+    }
+
     window.speechSynthesis.speak(utterance);
 };

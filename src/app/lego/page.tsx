@@ -31,9 +31,41 @@ export default function LegoTransformPage() {
         if (file) {
             playSound('correct');
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-                speakJapanese("すごい！ これを アイテムに かえるよ。");
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height = Math.round((height * MAX_WIDTH) / width);
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width = Math.round((width * MAX_HEIGHT) / height);
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+
+                    // Compress to JPEG to dramatically reduce size
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                    setImagePreview(compressedBase64);
+                    speakJapanese("すごい！ これを アイテムに かえるよ。");
+                };
+                if (event.target?.result) {
+                    img.src = event.target.result as string;
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -52,7 +84,10 @@ export default function LegoTransformPage() {
                 body: JSON.stringify({ imageBase64: imagePreview })
             });
 
-            if (!res.ok) throw new Error("API request failed");
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`API Error ${res.status}: ${errorText.substring(0, 100)}`);
+            }
 
             const data = await res.json();
             setGeneratedItem(data);
@@ -65,15 +100,13 @@ export default function LegoTransformPage() {
             playSound('levelUp');
             speakJapanese(`${data.name} が できたよ！`);
 
-            // Add to inventory (we mint a new UUID for the store but use a generic logic since it's dynamic)
-            // For a real app, dynamic items need to be pushed to the ALL_ITEMS map or the inventory store needs to handle custom items.
-            // Here, we just hack the ID format to bypass strict GameItem checks in Room/Shop momentarily, or ideally we'd implement custom items.
             console.log("Generated:", data);
 
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
             playSound('wrong');
             speakJapanese("えらーが おきたみたい。もういっかい やってみてね。");
+            alert(`エラー詳細: ${err.message || "通信に失敗しました"}`);
         } finally {
             setIsProcessing(false);
         }
