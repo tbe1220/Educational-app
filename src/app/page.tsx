@@ -39,7 +39,7 @@ export default function TopPage() {
       />
 
       {/* Header Stat Bar */}
-      <div className="absolute inset-x-0 top-0 p-4 md:p-8 flex justify-between items-start z-10 w-full max-w-7xl mx-auto">
+      <div className="relative p-4 md:p-8 flex flex-col md:flex-row justify-between items-start z-10 w-full max-w-7xl mx-auto gap-4">
         {/* Profile Group */}
         <div className="flex flex-col gap-2">
           <div className="bg-white/90 backdrop-blur-sm rounded-[2rem] p-4 shadow-lg border-4 border-pop-yellow flex items-center gap-4">
@@ -112,7 +112,7 @@ export default function TopPage() {
         </div>
       </div>
 
-      <div className="z-10 w-full max-w-4xl mt-24 flex flex-col items-center gap-12">
+      <div className="z-10 w-full max-w-4xl mt-8 md:mt-24 flex flex-col items-center gap-12">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

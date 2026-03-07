@@ -123,11 +123,11 @@ export default function LoginRegister({ onComplete }: LoginRegisterProps) {
 
                     {mode === 'select' && (
                         <motion.div key="select" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col gap-6">
-                            <AppButton color="green" size="xl" onClick={() => { playSound('click'); setMode('new'); }}>
+                            <AppButton color="green" className="w-full py-6 md:py-8 text-2xl md:text-5xl rounded-[2rem] border-b-8" onClick={() => { playSound('click'); setMode('new'); }}>
                                 はじめて あそぶ
                             </AppButton>
-                            <AppButton color="blue" size="xl" onClick={() => { playSound('click'); setMode('load'); }}>
-                                つづきから あそぶ (あいことば)
+                            <AppButton color="blue" className="w-full py-6 md:py-8 text-[1.4rem] md:text-5xl rounded-[2rem] border-b-8" onClick={() => { playSound('click'); setMode('load'); }}>
+                                つづきから あそぶ <br className="md:hidden" /><span className="text-lg md:text-3xl">(あいことば)</span>
                             </AppButton>
                         </motion.div>
                     )}

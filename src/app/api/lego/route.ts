@@ -19,7 +19,12 @@ export async function POST(req: Request) {
         const base64Data = imageBase64.replace(/^data:image\/(png|jpeg|webp);base64,/, "");
 
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            generationConfig: {
+                responseMimeType: "application/json",
+            }
+        });
 
         const prompt = `
       この画像はレゴブロックなどで作られた形です。
@@ -64,7 +69,8 @@ export async function POST(req: Request) {
         }
 
         if (!jsonStr) {
-            return NextResponse.json({ error: "Failed to parse AI response: No JSON found" }, { status: 500 });
+            console.error("No JSON found. Raw text:", text);
+            return NextResponse.json({ error: "Failed to parse AI response: No JSON found", raw: text }, { status: 500 });
         }
 
         // Additional cleanup for Gemini quirks
@@ -76,6 +82,6 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error("Gemini API error:", error);
-        return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ error: "API Error or Parse Error", details: error.message }, { status: 500 });
     }
 }
