@@ -140,7 +140,7 @@ export default function LoginRegister({ onComplete }: LoginRegisterProps) {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 maxLength={10}
-                                className="w-full text-4xl p-4 text-center border-4 border-gray-300 rounded-2xl mb-8 focus:border-pop-green outline-none"
+                                className="w-full text-2xl md:text-4xl p-3 md:p-4 text-center border-4 border-gray-300 rounded-2xl mb-8 focus:border-pop-green outline-none"
                                 placeholder="ひらがな"
                             />
 
@@ -153,34 +153,34 @@ export default function LoginRegister({ onComplete }: LoginRegisterProps) {
 
                     {mode === 'difficulty' && (
                         <motion.div key="difficulty" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col items-center w-full">
-                            <h2 className="text-3xl font-bold text-gray-700 mb-6 w-full text-center border-b-4 border-gray-200 pb-4">むずかしさ を えらんでね</h2>
+                            <h2 className="text-xl md:text-3xl font-bold text-gray-700 mb-6 w-full text-center border-b-4 border-gray-200 pb-4">むずかしさ を えらんでね</h2>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full mb-8">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-8">
                                 <AppButton
                                     color={difficulty === 'easy' ? 'green' : 'gray'}
-                                    className={`flex flex-col py-4 md:py-6 ${difficulty === 'easy' ? 'ring-4 ring-green-500 scale-105' : ''}`}
+                                    className={`flex flex-col items-center justify-center py-4 md:py-6 ${difficulty === 'easy' ? 'ring-4 ring-green-500 scale-105' : ''}`}
                                     onClick={() => { playSound('click'); setDifficulty('easy'); }}
                                 >
-                                    <span className="text-xl md:text-2xl mb-1 md:mb-2">やさしい</span>
-                                    <span className="text-xs md:text-sm font-normal">3〜4さい むけ</span>
+                                    <span className="text-lg md:text-2xl mb-1 md:mb-2 leading-tight">やさしい</span>
+                                    <span className="text-[11px] md:text-sm font-normal leading-tight mt-1 text-balance">3〜4さい むけ</span>
                                 </AppButton>
 
                                 <AppButton
                                     color={difficulty === 'normal' ? 'blue' : 'gray'}
-                                    className={`flex flex-col py-4 md:py-6 ${difficulty === 'normal' ? 'ring-4 ring-blue-500 scale-105' : ''}`}
+                                    className={`flex flex-col items-center justify-center py-4 md:py-6 ${difficulty === 'normal' ? 'ring-4 ring-blue-500 scale-105' : ''}`}
                                     onClick={() => { playSound('click'); setDifficulty('normal'); }}
                                 >
-                                    <span className="text-xl md:text-2xl mb-1 md:mb-2">ふつう</span>
-                                    <span className="text-xs md:text-sm font-normal">5〜6さい むけ</span>
+                                    <span className="text-lg md:text-2xl mb-1 md:mb-2 leading-tight">ふつう</span>
+                                    <span className="text-[11px] md:text-sm font-normal leading-tight mt-1 text-balance">5〜6さい むけ</span>
                                 </AppButton>
 
                                 <AppButton
                                     color={difficulty === 'hard' ? 'red' : 'gray'}
-                                    className={`flex flex-col py-4 md:py-6 ${difficulty === 'hard' ? 'ring-4 ring-red-500 scale-105' : ''}`}
+                                    className={`flex flex-col items-center justify-center py-4 md:py-6 ${difficulty === 'hard' ? 'ring-4 ring-red-500 scale-105' : ''}`}
                                     onClick={() => { playSound('click'); setDifficulty('hard'); }}
                                 >
-                                    <span className="text-lg md:text-2xl mb-1 md:mb-2">むずかしい</span>
-                                    <span className="text-[10px] md:text-sm font-normal text-balance">しょうがくせい むけ</span>
+                                    <span className="text-lg md:text-2xl mb-1 md:mb-2 leading-tight">むずかしい</span>
+                                    <span className="text-[11px] md:text-sm font-normal text-balance leading-tight mt-1">しょうがくせい むけ</span>
                                 </AppButton>
                             </div>
 
