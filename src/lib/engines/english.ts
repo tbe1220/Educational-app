@@ -46,7 +46,8 @@ const ENGLISH_DATA: EnglishQuestion[] = [
     { id: 'ep10', category: 'phrases', englishText: 'Let\'s go!', japaneseMeaning: 'さあ、いこう', choices: ['まって', 'さあ、いこう', 'かえろう', 'あそぼう'], explanationText: 'Let\'s go は いっしょに しゅっぱつする「さあ、いこう」だよ。' },
 ];
 
-let lastEnglishQuestionId = "";
+const RECENT_ENGLISH_HISTORY_SIZE = 5;
+const recentEnglishQuestionIds: string[] = [];
 
 export const generateEnglishQuestion = (): EnglishQuestion => {
     const difficulty = usePlayerStore.getState().difficulty;
@@ -62,11 +63,11 @@ export const generateEnglishQuestion = (): EnglishQuestion => {
     let chosenQuestion: EnglishQuestion | null = null;
     let attempts = 0;
 
-    while (attempts < 5) {
+    while (attempts < 15) {
         const randomIndex = Math.floor(Math.random() * filteredData.length);
         const q = filteredData[randomIndex];
 
-        if (q.id !== lastEnglishQuestionId) {
+        if (!recentEnglishQuestionIds.includes(q.id)) {
             chosenQuestion = q;
             break;
         }
@@ -77,7 +78,10 @@ export const generateEnglishQuestion = (): EnglishQuestion => {
         chosenQuestion = filteredData[0];
     }
 
-    lastEnglishQuestionId = chosenQuestion.id;
+    recentEnglishQuestionIds.push(chosenQuestion.id);
+    if (recentEnglishQuestionIds.length > RECENT_ENGLISH_HISTORY_SIZE) {
+        recentEnglishQuestionIds.shift();
+    }
 
     const shuffledChoices = [...chosenQuestion.choices].sort(() => Math.random() - 0.5);
     return {

@@ -77,14 +77,17 @@ export default function MathEngineUI({
                 {/* Clock Numbers */}
                 {numbers.map(num => {
                     const angle = (num * 30 - 90) * (Math.PI / 180);
-                    const radius = 80;
+                    const radius = 70; // Slightly inside the border
                     const x = Math.cos(angle) * radius;
                     const y = Math.sin(angle) * radius;
                     return (
                         <div
                             key={num}
-                            className="absolute font-black text-gray-400 text-2xl"
-                            style={{ transform: `translate(${x}px, ${y}px)` }}
+                            className="absolute font-black text-gray-800 text-3xl"
+                            style={{
+                                transform: `translate(${x}px, ${y}px)`,
+                                textShadow: '0 2px 4px rgba(255,255,255,0.8)'
+                            }}
                         >
                             {num}
                         </div>

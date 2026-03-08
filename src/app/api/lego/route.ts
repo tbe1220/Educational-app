@@ -43,30 +43,50 @@ export async function POST(req: Request) {
       ※powerの値は、100から1000までのランダムな数値を「数字のみ（クォーテーションや文字列なし）」で入れてください。
     `;
 
-        const result = await model.generateContent([
-            prompt,
-            {
-                inlineData: {
-                    data: base64Data,
-                    mimeType: "image/jpeg",
-                },
-            },
-        ]);
+        let result;
+        const maxRetries = 2;
+        let lastError = null;
+
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                result = await model.generateContent([
+                    prompt,
+                    {
+                        inlineData: {
+                            data: base64Data,
+                            mimeType: "image/jpeg", // Consider updating if using webp
+                        },
+                    },
+                ]);
+                break; // Success
+            } catch (e: any) {
+                lastError = e;
+                console.warn(`Attempt ${i + 1} failed:`, e.message);
+                if (i < maxRetries - 1) {
+                    // Wait 1 second before retrying
+                    await new Promise(res => setTimeout(res, 1000));
+                }
+            }
+        }
+
+        if (!result) {
+            throw new Error(`Failed to generate content after ${maxRetries} attempts. Last error: ${lastError?.message || 'Unknown'}`);
+        }
 
         const response = await result.response;
         const text = response.text();
 
         // Extract JSON robustly from markdown or plain text
-        let jsonStr = text;
-        const jsonBlockMatch = text.match(/```json\n([\s\S]*?)\n```/);
+        let jsonStr = text.trim();
+        const jsonBlockMatch = text.match(/```(?:json)?\s*\n([\s\S]*?)\n```/i);
         if (jsonBlockMatch) {
-            jsonStr = jsonBlockMatch[1];
+            jsonStr = jsonBlockMatch[1].trim();
         } else {
             // Fallback: Find outermost '{' and '}'
             const start = text.indexOf('{');
             const end = text.lastIndexOf('}');
             if (start !== -1 && end !== -1 && end > start) {
-                jsonStr = text.substring(start, end + 1);
+                jsonStr = text.substring(start, end + 1).trim();
             }
         }
 
@@ -75,8 +95,10 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Failed to parse AI response: No JSON found", raw: text }, { status: 500 });
         }
 
-        // Additional cleanup for Gemini quirks
-        jsonStr = jsonStr.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
+        // Strip any leading non-json characters (BOM, etc)
+        if (jsonStr.charCodeAt(0) === 0xFEFF) {
+            jsonStr = jsonStr.slice(1);
+        }
 
         const itemData = JSON.parse(jsonStr);
 

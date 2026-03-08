@@ -128,7 +128,7 @@ export default function MyRoomPage() {
                 </div>
 
                 {/* INVENTORY VIEW */}
-                <div className={`absolute inset-0 bg-white/95 backdrop-blur-md z-30 flex flex-col p-8 transition-transform duration-500 ease-in-out ${activeTab === 'inventory' ? 'translate-y-0' : 'translate-y-full'}`}>
+                <div className={`absolute inset-0 bg-white/95 backdrop-blur-md z-30 flex flex-col p-8 transition-transform duration-500 ease-in-out ${activeTab === 'inventory' ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}>
                     <h2 className="text-4xl font-bold text-gray-800 mb-8 flex items-center gap-4">
                         <Menu className="w-10 h-10 text-pop-blue" />
                         もちもの リスト

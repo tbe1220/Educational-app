@@ -149,7 +149,8 @@ const generateClock = (difficulty: string): MathQuestion => {
         hintDots: undefined
     };
 };
-let lastMathQuestionStr = "";
+const RECENT_MATH_HISTORY_SIZE = 5;
+const recentMathQuestions: string[] = [];
 
 // Generate a random math question based on selected difficulty
 export const generateMathQuestion = (): MathQuestion => {
@@ -170,7 +171,7 @@ export const generateMathQuestion = (): MathQuestion => {
     let question: MathQuestion | null = null;
     let attempts = 0;
 
-    while (attempts < 5) {
+    while (attempts < 15) { // increased attempt count to compensate for stricter history
         type = types[Math.floor(Math.random() * types.length)];
         switch (type) {
             case 'addition': question = generateAddition(difficulty); break;
@@ -179,18 +180,21 @@ export const generateMathQuestion = (): MathQuestion => {
             case 'division': question = generateDivision(difficulty); break;
             case 'clock': question = generateClock(difficulty); break;
         }
-        if (question && question.questionStr !== lastMathQuestionStr) {
+        if (question && !recentMathQuestions.includes(question.questionStr)) {
             break;
         }
         attempts++;
     }
 
     if (question) {
-        lastMathQuestionStr = question.questionStr;
+        recentMathQuestions.push(question.questionStr);
+        if (recentMathQuestions.length > RECENT_MATH_HISTORY_SIZE) {
+            recentMathQuestions.shift(); // Keep history size contained
+        }
         return question;
     }
+
     // Fallback if loop fails
     const fallback = generateAddition(difficulty);
-    lastMathQuestionStr = fallback.questionStr;
     return fallback;
 };

@@ -111,7 +111,8 @@ const EXTRA_SETS: Record<string, WordSet> = {
 
 const ALL_SETS = { ...WORD_SETS, ...EXTRA_SETS };
 
-let lastLanguageQuestionStr = "";
+const RECENT_LANG_HISTORY_SIZE = 5;
+const recentLanguageQuestions: string[] = [];
 
 export const generateLanguageQuestion = (): LanguageQuestion => {
     const difficulty = usePlayerStore.getState().difficulty;
@@ -120,7 +121,7 @@ export const generateLanguageQuestion = (): LanguageQuestion => {
     let chosenQuestion: LanguageQuestion | null = null;
     let attempts = 0;
 
-    while (attempts < 5) {
+    while (attempts < 20) {
         const categoryKey = categories[Math.floor(Math.random() * categories.length)];
 
         // If the category is one of the new 'WordSet' categories
@@ -157,17 +158,24 @@ export const generateLanguageQuestion = (): LanguageQuestion => {
             };
         }
 
-        if (chosenQuestion.questionStr !== lastLanguageQuestionStr) {
+        if (chosenQuestion && !recentLanguageQuestions.includes(chosenQuestion.questionStr)) {
             break;
         }
         attempts++;
     }
 
     if (chosenQuestion) {
-        lastLanguageQuestionStr = chosenQuestion.questionStr;
+        recentLanguageQuestions.push(chosenQuestion.questionStr);
+        if (recentLanguageQuestions.length > RECENT_LANG_HISTORY_SIZE) {
+            recentLanguageQuestions.shift();
+        }
         return chosenQuestion;
     }
+
     // Fallback if loop fails
-    lastLanguageQuestionStr = ALL_QUESTIONS[0].questionStr;
-    return ALL_QUESTIONS[0];
+    const fallback = ALL_QUESTIONS[0];
+    return {
+        ...fallback,
+        choices: [...fallback.choices].sort(() => Math.random() - 0.5),
+    };
 };
