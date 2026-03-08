@@ -28,11 +28,18 @@ const SAFETY_QUESTIONS: LanguageQuestion[] = [
 ];
 
 const TRACING_QUESTIONS: LanguageQuestion[] = [
-    // Tracing will be handled slightly differently in UI, asking them to input a word
-    // For the sake of choice-based engine compatibility initially:
+    // Stroke order and character questions
     { id: 't1', category: 'tracing', questionStr: '「りんご」の さいしょの もじは？', correctAnswer: 'り', choices: ['り', 'ん', 'ご', 'み'] },
     { id: 't2', category: 'tracing', questionStr: '「くるま」の さいごの もじは？', correctAnswer: 'ま', choices: ['ま', 'る', 'く', 'た'] },
     { id: 't3', category: 'tracing', questionStr: '「でんしゃ」の さいしょの もじは？', correctAnswer: 'で', choices: ['で', 'ん', 'し', 'や'] },
+
+    // Hiragana stroke counts
+    { id: 'tc1', category: 'tracing', questionStr: '「あ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tc2', category: 'tracing', questionStr: '「い」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tc3', category: 'tracing', questionStr: '「う」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tc4', category: 'tracing', questionStr: '「く」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tc5', category: 'tracing', questionStr: '「す」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tc6', category: 'tracing', questionStr: '「き」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
 ];
 
 const VEHICLE_QUESTIONS: LanguageQuestion[] = [
@@ -47,11 +54,11 @@ import { usePlayerStore } from "@/store/usePlayerStore";
 // Get available categories based on difficulty
 const getCategories = (difficulty: string) => {
     if (difficulty === 'easy') {
-        return ['bugs', 'colors_fruits']; // Simplified categories
+        return ['bugs', 'colors_fruits', 'tracing']; // Simplified categories
     } else if (difficulty === 'hard') {
-        return ['countries', 'safety', 'animals_hard'];
+        return ['countries', 'safety', 'animals_hard', 'tracing'];
     }
-    return ['bugs', 'countries', 'safety'];
+    return ['bugs', 'countries', 'safety', 'tracing'];
 };
 
 interface WordSetItem {

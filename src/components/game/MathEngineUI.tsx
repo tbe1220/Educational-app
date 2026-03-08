@@ -68,19 +68,39 @@ export default function MathEngineUI({
         const hourAngle = (h % 12) * 30 + (m / 60) * 30; // 360 / 12 = 30deg per hour
         const minuteAngle = m * 6; // 360 / 60 = 6deg per minute
 
+        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
         return (
-            <div className="relative w-48 h-48 rounded-full border-8 border-pop-blue bg-white flex items-center justify-center shadow-lg mx-auto my-8">
-                <div className="absolute w-2 h-2 bg-black rounded-full z-10" />
+            <div className="relative w-56 h-56 rounded-full border-8 border-pop-blue bg-white flex items-center justify-center shadow-lg mx-auto my-8">
+                <div className="absolute w-3 h-3 bg-black rounded-full z-10" />
+
+                {/* Clock Numbers */}
+                {numbers.map(num => {
+                    const angle = (num * 30 - 90) * (Math.PI / 180);
+                    const radius = 80;
+                    const x = Math.cos(angle) * radius;
+                    const y = Math.sin(angle) * radius;
+                    return (
+                        <div
+                            key={num}
+                            className="absolute font-black text-gray-400 text-2xl"
+                            style={{ transform: `translate(${x}px, ${y}px)` }}
+                        >
+                            {num}
+                        </div>
+                    );
+                })}
+
                 {/* Hour Hand */}
                 <motion.div
-                    className="absolute w-2 h-14 bg-red-500 rounded-full origin-bottom"
+                    className="absolute w-3 h-16 bg-red-400 rounded-full origin-bottom"
                     style={{ bottom: '50%' }}
                     initial={{ rotate: 0 }}
                     animate={{ rotate: hourAngle }}
                 />
                 {/* Minute Hand */}
                 <motion.div
-                    className="absolute w-1 h-20 bg-blue-500 rounded-full origin-bottom"
+                    className="absolute w-1.5 h-24 bg-blue-400 rounded-full origin-bottom"
                     style={{ bottom: '50%' }}
                     initial={{ rotate: 0 }}
                     animate={{ rotate: minuteAngle }}

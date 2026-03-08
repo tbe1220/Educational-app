@@ -37,6 +37,13 @@ const ENGLISH_DATA: EnglishQuestion[] = [
     { id: 'ep3', category: 'phrases', englishText: 'How old are you?', japaneseMeaning: 'なんさい？', choices: ['なんさい？', 'おなまえは？', 'どこにいくの？', 'なにがすき？'], explanationText: 'How old は「とし」をきくことば。「なんさい？」だよ。' },
     { id: 'ep4', category: 'phrases', englishText: 'Thank you!', japaneseMeaning: 'ありがとう', choices: ['ごめんなさい', 'こんにちは', 'さようなら', 'ありがとう'], explanationText: 'Thank you は 「ありがとう」 っておれいをいう ことばだよ。' },
     { id: 'ep5', category: 'phrases', englishText: 'Good morning.', japaneseMeaning: 'おはよう', choices: ['こんにちは', 'こんばんは', 'おはよう', 'さようなら'], explanationText: 'Good morning は あさに いう あいさつ、「おはよう」だよ。' },
+
+    // Additional Conversational Phrases
+    { id: 'ep6', category: 'phrases', englishText: 'I am hungry.', japaneseMeaning: 'おなかがすいた', choices: ['おなかがすいた', 'のどがかわいた', 'ねむたい', 'げんきだよ'], explanationText: 'Hungry は「おなかがすいた」っていういみだよ。' },
+    { id: 'ep7', category: 'phrases', englishText: 'See you!', japaneseMeaning: 'またね', choices: ['こんにちは', 'またね', 'ごめんなさい', 'ありがとう'], explanationText: 'See you は かえるときに いう「またね」だよ。' },
+    { id: 'ep8', category: 'phrases', englishText: 'Here you are.', japaneseMeaning: 'はい、どうぞ', choices: ['はい、どうぞ', 'ありがとう', 'ごめんなさい', 'いただきます'], explanationText: 'Here you are は ものを はたすときに いう「はい、どうぞ」だよ。' },
+    { id: 'ep9', category: 'phrases', englishText: 'I am sorry.', japaneseMeaning: 'ごめんなさい', choices: ['ありがとう', 'こんにちは', 'ごめんなさい', 'さようなら'], explanationText: 'I am sorry は あやまるときに いう「ごめんなさい」だよ。' },
+    { id: 'ep10', category: 'phrases', englishText: 'Let\'s go!', japaneseMeaning: 'さあ、いこう', choices: ['まって', 'さあ、いこう', 'かえろう', 'あそぼう'], explanationText: 'Let\'s go は いっしょに しゅっぱつする「さあ、いこう」だよ。' },
 ];
 
 let lastEnglishQuestionId = "";
