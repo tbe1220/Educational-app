@@ -16,6 +16,7 @@ interface InventoryState {
     addItem: (itemType: 'weapon' | 'furniture', itemId: string) => void;
     moveRoomItem: (id: string, x: number, y: number) => void;
     placeRoomItem: (itemId: string, x: number, y: number) => void;
+    removeRoomItem: (id: string) => void;
     loadInventory: (userId: string) => Promise<void>;
 }
 export const useInventoryStore = create<InventoryState>((set, get) => {
@@ -36,6 +37,11 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
     // Helper to update room item pos
     const updateDbItem = async (id: string, x: number, y: number) => {
         await supabase.from('room_items').update({ x, y }).eq('id', id);
+    };
+
+    // Helper to request item removal
+    const removeDbItem = async (id: string) => {
+        await supabase.from('room_items').delete().eq('id', id);
     };
 
     return {
@@ -69,6 +75,12 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                 roomItems: [...state.roomItems, { id, itemId, x, y }]
             }));
             placeDbItem(id, itemId, x, y);
+        },
+        removeRoomItem: (id) => {
+            set((state) => ({
+                roomItems: state.roomItems.filter(item => item.id !== id)
+            }));
+            removeDbItem(id);
         },
         loadInventory: async (userId: string) => {
             try {

@@ -117,10 +117,24 @@ export default function MyRoomPage() {
                                     initial={{ x: instance.x, y: instance.y, scale: 0 }}
                                     animate={{ scale: 1 }}
                                     whileDrag={{ scale: 1.1, zIndex: 50 }}
-                                    className="absolute text-7xl cursor-move drop-shadow-xl z-10"
+                                    className="absolute text-7xl cursor-move drop-shadow-xl z-10 group"
                                     style={{ x: instance.x, y: instance.y }}
                                 >
                                     {itemInfo.emoji}
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            playSound('click');
+                                            useInventoryStore.getState().removeRoomItem(instance.id);
+                                        }}
+                                        onTouchEnd={(e) => {
+                                            e.stopPropagation(); // prevent drag end conflict usually, but click is better
+                                        }}
+                                        className="absolute -top-2 -right-2 bg-pop-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-md md:opacity-0 md:group-hover:opacity-100 transition-opacity z-50 border-2 border-white"
+                                        aria-label="かたづける"
+                                    >
+                                        ✕
+                                    </button>
                                 </motion.div>
                             );
                         })}
