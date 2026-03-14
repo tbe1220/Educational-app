@@ -78,36 +78,78 @@ export default function ShopPage() {
             <h1 className="text-5xl font-black text-pop-orange mb-8 drop-shadow-md">おみせやさん</h1>
 
             {purchaseStage === 'browse' && (
-                <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {ALL_ITEMS.map(item => {
-                        const isOwned = item.type === 'weapon' ? ownedWeapons.includes(item.id) : ownedFurniture.includes(item.id);
-                        const canAfford = points >= item.price;
+                <div className="w-full max-w-5xl flex flex-col gap-12">
+                    {/* Weapons Section */}
+                    <div className="bg-blue-50/50 p-6 rounded-[2rem] border-4 border-blue-100">
+                        <h2 className="text-3xl font-bold text-pop-blue mb-6 flex items-center gap-2">
+                            <span>⚔️</span> ぶき を かう (そうび する)
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {ALL_ITEMS.filter(i => i.type === 'weapon').map(item => {
+                                const isOwned = ownedWeapons.includes(item.id);
+                                const canAfford = points >= item.price;
+                                return (
+                                    <motion.div
+                                        key={item.id}
+                                        whileHover={!isOwned ? { scale: 1.05 } : {}}
+                                        whileTap={!isOwned ? { scale: 0.95 } : {}}
+                                        onClick={() => !isOwned && handleSelectItem(item)}
+                                        className={`
+                                            p-4 rounded-3xl border-4 shadow-md flex flex-col items-center justify-between text-center cursor-pointer min-h-[160px]
+                                            ${isOwned ? 'bg-gray-200 border-gray-300 opacity-60 cursor-not-allowed' :
+                                                canAfford ? 'bg-white border-pop-blue hover:border-blue-400' : 'bg-red-50 border-red-200'}
+                                        `}
+                                    >
+                                        <div className="text-5xl mb-2">{item.emoji}</div>
+                                        <div className="font-bold text-gray-700 text-sm h-10">{item.name}</div>
+                                        {isOwned ? (
+                                            <div className="mt-2 text-gray-500 font-bold bg-gray-300 px-3 py-1 rounded-full text-xs">もってる</div>
+                                        ) : (
+                                            <div className={`mt-2 font-bold px-3 py-1 rounded-full text-xs flex items-center gap-1 ${canAfford ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-500'}`}>
+                                                <Coins className="w-3 h-3" /> {item.price}
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </div>
 
-                        return (
-                            <motion.div
-                                key={item.id}
-                                whileHover={!isOwned ? { scale: 1.05 } : {}}
-                                whileTap={!isOwned ? { scale: 0.95 } : {}}
-                                onClick={() => !isOwned && handleSelectItem(item)}
-                                className={`
-                  p-4 rounded-3xl border-4 shadow-md flex flex-col items-center justify-between text-center cursor-pointer min-h-[160px]
-                  ${isOwned ? 'bg-gray-200 border-gray-300 opacity-60 cursor-not-allowed' :
-                                        canAfford ? 'bg-white border-pop-yellow hover:border-orange-400' : 'bg-red-50 border-red-200'}
-                `}
-                            >
-                                <div className="text-5xl mb-2">{item.emoji}</div>
-                                <div className="font-bold text-gray-700 text-sm">{item.name}</div>
-
-                                {isOwned ? (
-                                    <div className="mt-2 text-gray-500 font-bold bg-gray-300 px-3 py-1 rounded-full text-xs">もってる</div>
-                                ) : (
-                                    <div className={`mt-2 font-bold px-3 py-1 rounded-full text-xs flex items-center gap-1 ${canAfford ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-500'}`}>
-                                        <Coins className="w-3 h-3" /> {item.price}
-                                    </div>
-                                )}
-                            </motion.div>
-                        )
-                    })}
+                    {/* Furniture Section */}
+                    <div className="bg-orange-50/50 p-6 rounded-[2rem] border-4 border-orange-100 mb-12">
+                        <h2 className="text-3xl font-bold text-pop-orange mb-6 flex items-center gap-2">
+                            <span>🪑</span> かぐ を かう (おへや に おく)
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {ALL_ITEMS.filter(i => i.type === 'furniture').map(item => {
+                                const isOwned = ownedFurniture.includes(item.id);
+                                const canAfford = points >= item.price;
+                                return (
+                                    <motion.div
+                                        key={item.id}
+                                        whileHover={!isOwned ? { scale: 1.05 } : {}}
+                                        whileTap={!isOwned ? { scale: 0.95 } : {}}
+                                        onClick={() => !isOwned && handleSelectItem(item)}
+                                        className={`
+                                            p-4 rounded-3xl border-4 shadow-md flex flex-col items-center justify-between text-center cursor-pointer min-h-[160px]
+                                            ${isOwned ? 'bg-gray-200 border-gray-300 opacity-60 cursor-not-allowed' :
+                                                canAfford ? 'bg-white border-pop-orange hover:border-orange-400' : 'bg-red-50 border-red-200'}
+                                        `}
+                                    >
+                                        <div className="text-5xl mb-2">{item.emoji}</div>
+                                        <div className="font-bold text-gray-700 text-sm h-10">{item.name}</div>
+                                        {isOwned ? (
+                                            <div className="mt-2 text-gray-500 font-bold bg-gray-300 px-3 py-1 rounded-full text-xs">もってる</div>
+                                        ) : (
+                                            <div className={`mt-2 font-bold px-3 py-1 rounded-full text-xs flex items-center gap-1 ${canAfford ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-500'}`}>
+                                                <Coins className="w-3 h-3" /> {item.price}
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             )}
 

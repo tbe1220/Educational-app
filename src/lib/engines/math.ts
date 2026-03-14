@@ -29,9 +29,9 @@ const generateChoices = (correct: number, count: number = 4): number[] => {
 };
 
 export const generateAddition = (difficulty: string): MathQuestion => {
-    let maxSum = 30;
-    if (difficulty === 'easy') maxSum = 10;
-    if (difficulty === 'hard') maxSum = 100;
+    let maxSum = 100; // was 30
+    if (difficulty === 'easy') maxSum = 20; // was 10
+    if (difficulty === 'hard') maxSum = 500; // was 100
 
     const a = Math.floor(Math.random() * (maxSum - 1)) + 1;
     const b = Math.floor(Math.random() * (maxSum - a)) + 1;
@@ -48,9 +48,9 @@ export const generateAddition = (difficulty: string): MathQuestion => {
 };
 
 const generateSubtraction = (difficulty: string): MathQuestion => {
-    let maxVal = 20;
-    if (difficulty === 'easy') maxVal = 10;
-    if (difficulty === 'hard') maxVal = 50;
+    let maxVal = 50; // was 20
+    if (difficulty === 'easy') maxVal = 15; // was 10
+    if (difficulty === 'hard') maxVal = 200; // was 50
 
     const a = Math.floor(Math.random() * maxVal) + 5;
     const b = Math.floor(Math.random() * (a - 1)) + 1;
@@ -68,9 +68,9 @@ const generateSubtraction = (difficulty: string): MathQuestion => {
 
 const generateMultiplication = (difficulty: string): MathQuestion => {
     // easy skips this normally, but if forced, keep it small
-    let scale = difficulty === 'hard' ? 9 : 5;
+    let scale = difficulty === 'hard' ? 20 : 9; // was 9 / 5
     const a = Math.floor(Math.random() * scale) + 1; // 1 to scale
-    const b = Math.floor(Math.random() * 9) + 1; // 1 to 9
+    const b = Math.floor(Math.random() * (difficulty === 'hard' ? 20 : 9)) + 1; // 1 to 9 or 20
     const answer = a * b;
 
     return {
@@ -85,9 +85,9 @@ const generateMultiplication = (difficulty: string): MathQuestion => {
 
 const generateDivision = (difficulty: string): MathQuestion => {
     // Division is inverse of multiplication.
-    let scale = difficulty === 'hard' ? 9 : 5;
+    let scale = difficulty === 'hard' ? 20 : 9;
     const b = Math.floor(Math.random() * scale) + 1;
-    const answer = Math.floor(Math.random() * 9) + 1;
+    const answer = Math.floor(Math.random() * (difficulty === 'hard' ? 20 : 9)) + 1;
     const a = b * answer;
 
     return {

@@ -106,6 +106,28 @@ const EXTRA_SETS: Record<string, WordSet> = {
             { text: 'オランウータン', hint: 'もりのひと', emoji: '🦧' },
             { text: 'カメレオン', hint: 'いろがかわる', emoji: '🦎' },
         ]
+    },
+    school_items: {
+        category: 'がっこうのもの',
+        questionPrompt: 'これは なに？',
+        items: [
+            { text: 'えんぴつ', hint: 'じをかくもの', emoji: '✏️' },
+            { text: 'ほん', hint: 'よむもの', emoji: '📖' },
+            { text: 'はさみ', hint: 'かみをきるもの', emoji: '✂️' },
+            { text: 'かばん', hint: 'にもつをいれるもの', emoji: '🎒' },
+            { text: 'とけい', hint: 'じかんがわかるもの', emoji: '⌚' },
+        ]
+    },
+    nature: {
+        category: 'しぜん',
+        questionPrompt: 'これは なに？',
+        items: [
+            { text: 'たいよう', hint: 'あかるくてあつい', emoji: '☀️' },
+            { text: 'つき', hint: 'よるにでる', emoji: '🌙' },
+            { text: 'ほし', hint: 'よるにきらきら', emoji: '⭐' },
+            { text: 'くも', hint: 'そらにふわふわ', emoji: '☁️' },
+            { text: 'あめ', hint: 'そらからふるみず', emoji: '☔' },
+        ]
     }
 };
 

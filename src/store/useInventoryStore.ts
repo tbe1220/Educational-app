@@ -31,17 +31,32 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
     const placeDbItem = async (id: string, itemId: string, x: number, y: number) => {
         const userId = usePlayerStore.getState().userId;
         if (!userId) return;
-        await supabase.from('room_items').insert([{ id: id, user_id: userId, item_id: itemId, x, y }]);
+        try {
+            const { error } = await supabase.from('room_items').insert([{ id, user_id: userId, item_id: itemId, x, y }]);
+            if (error) console.error("Error inserting room item:", error);
+        } catch (e) {
+            console.error("Exception inserting room item:", e);
+        }
     };
 
     // Helper to update room item pos
     const updateDbItem = async (id: string, x: number, y: number) => {
-        await supabase.from('room_items').update({ x, y }).eq('id', id);
+        try {
+            const { error } = await supabase.from('room_items').update({ x, y }).eq('id', id);
+            if (error) console.error("Error updating room item:", error);
+        } catch (e) {
+            console.error("Exception updating room item:", e);
+        }
     };
 
     // Helper to request item removal
     const removeDbItem = async (id: string) => {
-        await supabase.from('room_items').delete().eq('id', id);
+        try {
+            const { error } = await supabase.from('room_items').delete().eq('id', id);
+            if (error) console.error("Error deleting room item:", error);
+        } catch (e) {
+            console.error("Exception deleting room item:", e);
+        }
     };
 
     return {

@@ -203,7 +203,7 @@ export default function LoginRegister({ onComplete }: LoginRegisterProps) {
                                 value={pin}
                                 onChange={(e) => setPin(e.target.value)}
                                 maxLength={4}
-                                className="w-full max-w-[200px] text-6xl tracking-[1em] pl-[1em] p-4 text-center border-4 border-gray-300 rounded-2xl mb-8 focus:border-pop-blue outline-none font-mono"
+                                className="w-full max-w-[250px] text-6xl tracking-[0.5em] pl-[0.5em] p-4 text-center border-4 border-gray-300 rounded-2xl mb-8 focus:border-pop-blue outline-none font-mono"
                                 placeholder="1234"
                             />
                             {errorMsg && <p className="text-red-500 font-bold mb-4 animate-bounce">{errorMsg}</p>}

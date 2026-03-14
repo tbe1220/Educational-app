@@ -106,6 +106,15 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error("Gemini API error:", error);
-        return NextResponse.json({ error: "API Error or Parse Error", details: error.message }, { status: 500 });
+
+        let clientFriendlyMessage = "カメラの ちょうしが わるいみたい。もういちど やってみてね！";
+
+        if (error.message?.includes("API key not valid") || error.message?.includes("API key not configured")) {
+            clientFriendlyMessage = "APIキーが 設定されていません。おうちのひとに かくにん してもらってね！";
+        } else if (error.message?.includes("timeout") || error.message?.includes("fetch")) {
+            clientFriendlyMessage = "つうしんが うまくいきませんでした。ネットのつながる ばしょで もういちど やってみてね！";
+        }
+
+        return NextResponse.json({ error: clientFriendlyMessage, details: error.message }, { status: 500 });
     }
 }

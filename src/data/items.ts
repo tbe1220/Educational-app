@@ -33,6 +33,17 @@ export const FURNITURE: GameItem[] = [
     { id: 'f8', name: 'くまのぬいぐるみ', type: 'furniture', price: 150, emoji: '🧸' },
     { id: 'f9', name: 'せんぷうき', type: 'furniture', price: 120, emoji: '🌀' },
     { id: 'f10', name: 'おもちゃばこ', type: 'furniture', price: 250, emoji: '📦' },
+    // 10 New requested furniture types
+    { id: 'f11', name: 'まもりの かべ', type: 'furniture', price: 400, emoji: '🧱' },
+    { id: 'f12', name: 'おとしあなの わな', type: 'furniture', price: 350, emoji: '🕳️' },
+    { id: 'f13', name: 'おおきな テーブル', type: 'furniture', price: 200, emoji: '🍳' },
+    { id: 'f14', name: 'ほんだな', type: 'furniture', price: 220, emoji: '📚' },
+    { id: 'f15', name: 'かんようしょくぶつ', type: 'furniture', price: 180, emoji: '🪴' },
+    { id: 'f16', name: 'ふかふか ソファ', type: 'furniture', price: 320, emoji: '🛋️' },
+    { id: 'f17', name: 'おおきな とけい', type: 'furniture', price: 280, emoji: '🕰️' },
+    { id: 'f18', name: 'あたたかい ラグ', type: 'furniture', price: 150, emoji: '🧶' },
+    { id: 'f19', name: 'ゴミばこ', type: 'furniture', price: 50, emoji: '🗑️' },
+    { id: 'f20', name: 'あかるい ランプ', type: 'furniture', price: 160, emoji: '💡' },
 ];
 
 export const ALL_ITEMS = [...WEAPONS, ...FURNITURE];

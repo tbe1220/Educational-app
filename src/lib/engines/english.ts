@@ -44,6 +44,14 @@ const ENGLISH_DATA: EnglishQuestion[] = [
     { id: 'ep8', category: 'phrases', englishText: 'Here you are.', japaneseMeaning: 'はい、どうぞ', choices: ['はい、どうぞ', 'ありがとう', 'ごめんなさい', 'いただきます'], explanationText: 'Here you are は ものを はたすときに いう「はい、どうぞ」だよ。' },
     { id: 'ep9', category: 'phrases', englishText: 'I am sorry.', japaneseMeaning: 'ごめんなさい', choices: ['ありがとう', 'こんにちは', 'ごめんなさい', 'さようなら'], explanationText: 'I am sorry は あやまるときに いう「ごめんなさい」だよ。' },
     { id: 'ep10', category: 'phrases', englishText: 'Let\'s go!', japaneseMeaning: 'さあ、いこう', choices: ['まって', 'さあ、いこう', 'かえろう', 'あそぼう'], explanationText: 'Let\'s go は いっしょに しゅっぱつする「さあ、いこう」だよ。' },
+
+    // Additional Batch 5 
+    { id: 'ea5', category: 'animals', englishText: 'Monkey', japaneseMeaning: 'さる', choices: ['ごりら', 'さる', 'いるか', 'きつね'], explanationText: 'Monkey は 「さる」 だよ。' },
+    { id: 'ea6', category: 'animals', englishText: 'Rabbit', japaneseMeaning: 'うさぎ', choices: ['ねずみ', 'うさぎ', 'こあら', 'いぬ'], explanationText: 'Rabbit は 「うさぎ」 だよ。' },
+    { id: 'ef5', category: 'foods', englishText: 'Milk', japaneseMeaning: 'ぎゅうにゅう', choices: ['みず', 'おちゃ', 'ぎゅうにゅう', 'じゅーす'], explanationText: 'Milk は うしさんからしぼる 「ぎゅうにゅう」 だよ。' },
+    { id: 'ec4', category: 'colors', englishText: 'Green', japaneseMeaning: 'みどり', choices: ['あお', 'あか', 'きいろ', 'みどり'], explanationText: 'Green は はっぱの いろ、「みどり」だよ。' },
+    { id: 'ep11', category: 'phrases', englishText: 'Good night.', japaneseMeaning: 'おやすみなさい', choices: ['おはよう', 'こんにちは', 'おやすみなさい', 'さようなら'], explanationText: 'Good night は ねるまえに いう「おやすみなさい」だよ。' },
+    { id: 'ep12', category: 'phrases', englishText: 'I like apples.', japaneseMeaning: 'りんごがすき', choices: ['りんごがきらい', 'りんごがすき', 'みかんがすき', 'ばなながすき'], explanationText: 'I like は「すき」という意味だよ。' },
 ];
 
 const RECENT_ENGLISH_HISTORY_SIZE = 5;
