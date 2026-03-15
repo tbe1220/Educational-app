@@ -19,6 +19,13 @@ export default function MyRoomPage() {
     const roomRef = useRef<HTMLDivElement>(null);
 
     const handleDragEnd = (instanceId: string, event: any, info: any) => {
+        // Trash Detection: bottom 120px of the screen
+        if (info.point.y > window.innerHeight - 120) {
+            playSound('click'); // or a poof sound
+            useInventoryStore.getState().removeRoomItem(instanceId);
+            return;
+        }
+
         playSound('click');
         const item = roomItems.find(i => i.id === instanceId);
         if (item) {
@@ -162,6 +169,11 @@ export default function MyRoomPage() {
                                 </motion.div>
                             );
                         })}
+
+                        {/* Trash Zone */}
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-pop-red/90 text-white px-8 py-4 rounded-full font-bold text-2xl shadow-xl border-4 border-white flex items-center gap-4 z-40 pointer-events-none backdrop-blur-sm">
+                            <span className="text-4xl text-white">🚮</span> ここにポイッ！（おかたづけ）
+                        </div>
                     </div>
                 </div>
 

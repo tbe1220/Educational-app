@@ -81,11 +81,23 @@ const generateSubtraction = (difficulty: string): MathQuestion => {
 };
 
 const generateMultiplication = (difficulty: string): MathQuestion => {
-    // easy skips this normally, but if forced, keep it small
-    let scale = difficulty === 'hard' ? 20 : 9; // was 9 / 5
-    const a = Math.floor(Math.random() * scale) + 1; // 1 to scale
-    const b = Math.floor(Math.random() * (difficulty === 'hard' ? 20 : 9)) + 1; // 1 to 9 or 20
-    const answer = a * b;
+    let a = 1, b = 1, answer = 1;
+
+    if (difficulty === 'normal') {
+        // Find a pair where answer <= 20
+        let valid = false;
+        while (!valid) {
+            a = Math.floor(Math.random() * 9) + 1;
+            b = Math.floor(Math.random() * 9) + 1;
+            answer = a * b;
+            if (answer <= 20) valid = true;
+        }
+    } else {
+        let scale = difficulty === 'hard' ? 20 : 9;
+        a = Math.floor(Math.random() * scale) + 1; // 1 to scale
+        b = Math.floor(Math.random() * (difficulty === 'hard' ? 20 : 9)) + 1; // 1 to 9 or 20
+        answer = a * b;
+    }
 
     return {
         id: crypto.randomUUID(),
@@ -93,16 +105,29 @@ const generateMultiplication = (difficulty: string): MathQuestion => {
         questionStr: `${a} × ${b} ＝`,
         correctAnswer: answer,
         choices: generateChoices(answer),
-        hintDots: a
+        hintDots: a <= 10 ? a : undefined
     };
 };
 
 const generateDivision = (difficulty: string): MathQuestion => {
     // Division is inverse of multiplication.
-    let scale = difficulty === 'hard' ? 20 : 9;
-    const b = Math.floor(Math.random() * scale) + 1;
-    const answer = Math.floor(Math.random() * (difficulty === 'hard' ? 20 : 9)) + 1;
-    const a = b * answer;
+    let a = 1, b = 1, answer = 1;
+
+    if (difficulty === 'normal') {
+        // Find a pair where a < 20 (dividend)
+        let valid = false;
+        while (!valid) {
+            b = Math.floor(Math.random() * 9) + 1;
+            answer = Math.floor(Math.random() * 9) + 1;
+            a = b * answer;
+            if (a < 20) valid = true;
+        }
+    } else {
+        let scale = difficulty === 'hard' ? 20 : 9;
+        b = Math.floor(Math.random() * scale) + 1;
+        answer = Math.floor(Math.random() * (difficulty === 'hard' ? 20 : 9)) + 1;
+        a = b * answer;
+    }
 
     return {
         id: crypto.randomUUID(),
@@ -110,7 +135,7 @@ const generateDivision = (difficulty: string): MathQuestion => {
         questionStr: `${a} ÷ ${b} ＝`,
         correctAnswer: answer,
         choices: generateChoices(answer),
-        hintDots: a
+        hintDots: a <= 10 ? a : undefined
     };
 };
 
