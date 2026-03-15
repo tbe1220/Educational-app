@@ -120,7 +120,7 @@ export default function TopPage() {
           className="text-center"
         >
           <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pop-red via-pop-orange to-pop-yellow drop-shadow-sm mb-4">
-            だましんえん
+            わくわく ぼうけんクエスト
           </h1>
           <h1 className="text-4xl md:text-6xl font-extrabold text-foreground drop-shadow-sm">
             まなびの だいぼうけん

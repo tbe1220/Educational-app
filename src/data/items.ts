@@ -1,4 +1,4 @@
-export type ItemType = 'weapon' | 'furniture' | 'friend';
+export type ItemType = 'weapon' | 'furniture' | 'friend' | 'top' | 'bottom';
 
 export interface GameItem {
     id: string;
@@ -20,6 +20,21 @@ export const WEAPONS: GameItem[] = [
     { id: 'w8', name: 'みずでっぽう', type: 'weapon', price: 80, emoji: '🔫' },
     { id: 'w9', name: 'ブーメラン', type: 'weapon', price: 120, emoji: '🌙' },
     { id: 'w10', name: 'ゆみや', type: 'weapon', price: 180, emoji: '🏹' },
+];
+
+export const TOPS: GameItem[] = [
+    { id: 't1', name: 'ふつうのふく', type: 'top', price: 0, emoji: '👕' },
+    { id: 't2', name: 'あかいふく', type: 'top', price: 50, emoji: '🎽' },
+    { id: 't3', name: 'おしゃれなふく', type: 'top', price: 150, emoji: '👔' },
+    { id: 't4', name: 'きもの', type: 'top', price: 300, emoji: '👘' },
+    { id: 't5', name: 'よろい', type: 'top', price: 500, emoji: '🛡️' },
+    { id: 't6', name: 'ドレス', type: 'top', price: 400, emoji: '👗' },
+];
+
+export const BOTTOMS: GameItem[] = [
+    { id: 'b1', name: 'ふつうのズボン', type: 'bottom', price: 0, emoji: '👖' },
+    { id: 'b2', name: 'はんずぼん', type: 'bottom', price: 50, emoji: '🩳' },
+    { id: 'b3', name: 'スカート', type: 'bottom', price: 100, emoji: '👗' }, // using dress for now or leave out
 ];
 
 export const FURNITURE: GameItem[] = [
@@ -53,7 +68,7 @@ export const FRIENDS: GameItem[] = [
     { id: 'fr3', name: 'くま', type: 'friend', price: 300, emoji: '🐻' },
     { id: 'fr4', name: 'さかな', type: 'friend', price: 80, emoji: '🐟' },
     { id: 'fr5', name: 'くじら', type: 'friend', price: 400, emoji: '🐳' },
-    { id: 'fr6', name: 'かぶとむし', type: 'friend', price: 150, emoji: '🪲' },
+    { id: 'fr6', name: 'あおむし', type: 'friend', price: 150, emoji: '🐛' },
     { id: 'fr7', name: 'ちょうちょう', type: 'friend', price: 90, emoji: '🦋' },
     { id: 'fr8', name: 'みつばち', type: 'friend', price: 110, emoji: '🐝' },
     { id: 'fr9', name: 'てんとうむし', type: 'friend', price: 100, emoji: '🐞' },
@@ -63,6 +78,12 @@ export const FRIENDS: GameItem[] = [
     { id: 'fr13', name: 'うさぎ', type: 'friend', price: 200, emoji: '🐰' },
     { id: 'fr14', name: 'かえる', type: 'friend', price: 100, emoji: '🐸' },
     { id: 'fr15', name: 'かめ', type: 'friend', price: 130, emoji: '🐢' },
+    { id: 'fr16', name: 'どくろ', type: 'friend', price: 300, emoji: '💀' },
+    { id: 'fr17', name: 'あくま', type: 'friend', price: 500, emoji: '😈' },
+    { id: 'fr18', name: 'おばけ', type: 'friend', price: 250, emoji: '👻' },
+    { id: 'fr19', name: 'どろぼう', type: 'friend', price: 350, emoji: '🥷' },
+    { id: 'fr20', name: 'うちゅうじん', type: 'friend', price: 400, emoji: '👽' },
+    { id: 'fr21', name: 'ぞんび', type: 'friend', price: 280, emoji: '🧟' },
 ];
 
-export const ALL_ITEMS = [...WEAPONS, ...FURNITURE, ...FRIENDS];
+export const ALL_ITEMS = [...WEAPONS, ...TOPS, ...BOTTOMS, ...FURNITURE, ...FRIENDS];

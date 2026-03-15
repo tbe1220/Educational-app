@@ -13,6 +13,8 @@ interface PlayerState {
     points: number;
     level: number;
     equippedWeaponId: string | null;
+    equippedTopId: string | null;
+    equippedBottomId: string | null;
     enemyAttackTime: number;
 
     setProfile: (userId: string, pin: string, name: string, difficulty: Difficulty) => void;
@@ -22,6 +24,8 @@ interface PlayerState {
     removePoints: (amount: number) => boolean;
     addLevel: (amount: number) => void;
     equipWeapon: (weaponId: string) => void;
+    equipTop: (topId: string) => void;
+    equipBottom: (bottomId: string) => void;
     heal: (amount: number) => void;
     takeDamage: (amount: number) => void;
 }
@@ -39,6 +43,8 @@ export const usePlayerStore = create<PlayerState>((set, get) => {
             if (updates.points !== undefined) dbUpdates.points = updates.points;
             if (updates.level !== undefined) dbUpdates.level = updates.level;
             if (updates.equippedWeaponId !== undefined) dbUpdates.equipped_weapon_id = updates.equippedWeaponId;
+            if (updates.equippedTopId !== undefined) dbUpdates.equipped_top_id = updates.equippedTopId;
+            if (updates.equippedBottomId !== undefined) dbUpdates.equipped_bottom_id = updates.equippedBottomId;
             if (updates.difficulty !== undefined) dbUpdates.difficulty = updates.difficulty;
 
             // We might also add a new column `enemy_attack_time` to profiles later, but for now it can be local or we can sync if the column exists.
@@ -60,6 +66,8 @@ export const usePlayerStore = create<PlayerState>((set, get) => {
         points: 0,
         level: 1,
         equippedWeaponId: null,
+        equippedTopId: 't1',    // default top
+        equippedBottomId: 'b1', // default bottom
         enemyAttackTime: 20,
 
         setProfile: (userId, pin, name, difficulty) => set({ userId, pin, name, difficulty }),
@@ -112,6 +120,16 @@ export const usePlayerStore = create<PlayerState>((set, get) => {
         equipWeapon: (weaponId) => set(() => {
             syncToDb({ equippedWeaponId: weaponId });
             return { equippedWeaponId: weaponId };
+        }),
+
+        equipTop: (topId) => set(() => {
+            syncToDb({ equippedTopId: topId });
+            return { equippedTopId: topId };
+        }),
+
+        equipBottom: (bottomId) => set(() => {
+            syncToDb({ equippedBottomId: bottomId });
+            return { equippedBottomId: bottomId };
         })
     };
 });

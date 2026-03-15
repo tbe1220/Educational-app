@@ -12,8 +12,8 @@ import AppButton from "@/components/ui/Button";
 
 export default function MyRoomPage() {
     const router = useRouter();
-    const { hp, maxHp, points, level, equippedWeaponId, equipWeapon } = usePlayerStore();
-    const { ownedWeapons, ownedFurniture, ownedFriends, roomItems, placeRoomItem, moveRoomItem } = useInventoryStore();
+    const { hp, maxHp, points, level, equippedWeaponId, equipWeapon, equippedTopId, equippedBottomId, equipTop, equipBottom } = usePlayerStore();
+    const { ownedWeapons, ownedFurniture, ownedFriends, ownedTops, ownedBottoms, roomItems, placeRoomItem, moveRoomItem } = useInventoryStore();
 
     const [activeTab, setActiveTab] = useState<'room' | 'inventory'>('room');
     const roomRef = useRef<HTMLDivElement>(null);
@@ -41,6 +41,8 @@ export default function MyRoomPage() {
     };
 
     const equippedWeaponInfo = ALL_ITEMS.find(i => i.id === equippedWeaponId);
+    const equippedTopInfo = ALL_ITEMS.find(i => i.id === equippedTopId) || { emoji: '👕' };
+    const equippedBottomInfo = ALL_ITEMS.find(i => i.id === equippedBottomId) || { emoji: '👖' };
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col relative overflow-hidden">
@@ -75,9 +77,29 @@ export default function MyRoomPage() {
                     ref={roomRef}
                 >
                     {/* Room Background */}
-                    <div className="absolute inset-4 md:inset-8 bg-orange-100 rounded-[3rem] shadow-inner border-8 border-orange-200 overflow-hidden">
-                        {/* Floor pattern */}
-                        <div className="absolute bottom-0 w-full h-1/2 bg-amber-200 border-t-4 border-amber-300 pattern-isometric" />
+                    <div className="absolute inset-4 md:inset-8 bg-sky-100 rounded-[3rem] shadow-inner border-8 border-orange-200 overflow-hidden flex">
+                        {/* Left Side: Room (Indoors) */}
+                        <div className="flex-1 h-full relative border-r-4 border-orange-300">
+                            {/* Wall */}
+                            <div className="absolute top-0 w-full h-1/2 bg-orange-100" />
+                            {/* Floor */}
+                            <div className="absolute bottom-0 w-full h-1/2 bg-amber-200 border-t-4 border-amber-300 pattern-isometric" />
+                        </div>
+
+                        {/* Right Side: Farm (Outdoors) */}
+                        <div className="flex-1 h-full relative">
+                            {/* Sky */}
+                            <div className="absolute top-0 w-full h-1/2 bg-sky-200 overflow-hidden">
+                                <div className="absolute top-4 right-4 text-6xl opacity-80">☁️</div>
+                                <div className="absolute top-12 right-24 text-4xl opacity-60">☁️</div>
+                            </div>
+                            {/* Farm Dirt */}
+                            <div className="absolute bottom-0 w-full h-1/2 bg-amber-700 border-t-8 border-green-500 flex justify-center pt-8">
+                                <div className="text-4xl text-amber-800 opacity-50 space-x-4">
+                                    <span>〰️</span><span>〰️</span><span>〰️</span>
+                                </div>
+                            </div>
+                        </div>
 
                         {/* The Player Avatar resting in the room */}
                         <motion.div
@@ -85,14 +107,16 @@ export default function MyRoomPage() {
                             dragMomentum={false}
                             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-move z-20"
                         >
-                            <div className="text-8xl drop-shadow-xl relative">
-                                👦
+                            <div className="flex flex-col items-center drop-shadow-xl relative leading-none">
+                                <span className="text-8xl">👦</span>
+                                <span className="text-7xl -mt-4">{equippedTopInfo.emoji}</span>
+                                <span className="text-7xl -mt-6">{equippedBottomInfo.emoji}</span>
                                 {/* Equipped Weapon Overlay */}
                                 {equippedWeaponInfo && (
                                     <motion.div
                                         initial={{ rotate: -45, scale: 0 }}
                                         animate={{ rotate: 15, scale: 1 }}
-                                        className="absolute -right-8 top-8 text-6xl drop-shadow-md z-30"
+                                        className="absolute -right-8 top-16 text-6xl drop-shadow-md z-30"
                                     >
                                         {equippedWeaponInfo.emoji}
                                     </motion.div>
@@ -210,6 +234,48 @@ export default function MyRoomPage() {
                                             <div className="font-bold text-gray-700 text-sm h-10">{itemInfo.name}</div>
                                             <AppButton color={isEquipped ? 'green' : 'blue'} size="md" className="!py-2 !text-lg w-full" onClick={() => handleEquip(wid)}>
                                                 {isEquipped ? 'はずす' : 'もつ'}
+                                            </AppButton>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="mt-12">
+                            <h3 className="text-2xl font-bold text-green-500 mb-4 border-b-4 border-green-200 pb-2">ふく (きがえる)</h3>
+                            <div className="flex gap-4 flex-wrap">
+                                {ownedTops.map(tid => {
+                                    const itemInfo = ALL_ITEMS.find(i => i.id === tid);
+                                    const isEquipped = tid === equippedTopId;
+                                    if (!itemInfo) return null;
+                                    return (
+                                        <div key={tid} className={`${isEquipped ? 'bg-green-100 border-green-500' : 'bg-green-50 border-green-200'} p-4 rounded-3xl border-4 flex flex-col items-center w-40 text-center gap-2 relative`}>
+                                            {isEquipped && <div className="absolute -top-4 -right-4 bg-pop-red text-white font-bold px-3 py-1 rounded-full text-xs animate-pulse">きている</div>}
+                                            <div className="text-6xl mb-2">{itemInfo.emoji}</div>
+                                            <div className="font-bold text-gray-700 text-sm h-10">{itemInfo.name}</div>
+                                            <AppButton color={isEquipped ? 'yellow' : 'green'} size="md" className="!py-2 !text-lg w-full" onClick={() => { playSound('click'); equipTop(tid); }}>
+                                                {isEquipped ? 'きている' : 'きる'}
+                                            </AppButton>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="mt-12">
+                            <h3 className="text-2xl font-bold text-purple-500 mb-4 border-b-4 border-purple-200 pb-2">ズボン (はきかえる)</h3>
+                            <div className="flex gap-4 flex-wrap">
+                                {ownedBottoms.map(bid => {
+                                    const itemInfo = ALL_ITEMS.find(i => i.id === bid);
+                                    const isEquipped = bid === equippedBottomId;
+                                    if (!itemInfo) return null;
+                                    return (
+                                        <div key={bid} className={`${isEquipped ? 'bg-purple-100 border-purple-500' : 'bg-purple-50 border-purple-200'} p-4 rounded-3xl border-4 flex flex-col items-center w-40 text-center gap-2 relative`}>
+                                            {isEquipped && <div className="absolute -top-4 -right-4 bg-pop-red text-white font-bold px-3 py-1 rounded-full text-xs animate-pulse">はいている</div>}
+                                            <div className="text-6xl mb-2">{itemInfo.emoji}</div>
+                                            <div className="font-bold text-gray-700 text-sm h-10">{itemInfo.name}</div>
+                                            <AppButton color={isEquipped ? 'yellow' : 'purple'} size="md" className="!py-2 !text-lg w-full" onClick={() => { playSound('click'); equipBottom(bid); }}>
+                                                {isEquipped ? 'はいている' : 'はく'}
                                             </AppButton>
                                         </div>
                                     )

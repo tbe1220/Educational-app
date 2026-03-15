@@ -14,8 +14,10 @@ interface InventoryState {
     ownedWeapons: string[];
     ownedFurniture: string[];
     ownedFriends: string[];
+    ownedTops: string[];
+    ownedBottoms: string[];
     roomItems: RoomItem[];
-    addItem: (itemType: 'weapon' | 'furniture' | 'friend', itemId: string) => void;
+    addItem: (itemType: 'weapon' | 'furniture' | 'friend' | 'top' | 'bottom', itemId: string) => void;
     moveRoomItem: (id: string, x: number, y: number) => void;
     placeRoomItem: (itemId: string, x: number, y: number) => void;
     removeRoomItem: (id: string) => void;
@@ -65,6 +67,8 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
         ownedWeapons: [],
         ownedFurniture: [],
         ownedFriends: [],
+        ownedTops: [],
+        ownedBottoms: [],
         roomItems: [],
         addItem: (itemTypeArg, itemId) => { // Renamed itemType to itemTypeArg to avoid shadowing
             set((state) => {
@@ -80,6 +84,14 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                 if (itemType === 'friend' && !state.ownedFriends.includes(itemId)) {
                     addDbItem('friend', itemId);
                     return { ownedFriends: [...state.ownedFriends, itemId] };
+                }
+                if (itemType === 'top' && !state.ownedTops.includes(itemId)) {
+                    addDbItem('top', itemId);
+                    return { ownedTops: [...state.ownedTops, itemId] };
+                }
+                if (itemType === 'bottom' && !state.ownedBottoms.includes(itemId)) {
+                    addDbItem('bottom', itemId);
+                    return { ownedBottoms: [...state.ownedBottoms, itemId] };
                 }
                 return state;
             });
@@ -113,6 +125,9 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                 const weapons = ['w1']; // Default weapon
                 const furniture: string[] = [];
                 const friends: string[] = [];
+                const tops = ['t1'];    // Default top
+                const bottoms = ['b1']; // Default bottom
+
                 inventoryData?.forEach((inv: any) => {
                     const type = ALL_ITEMS.find(i => i.id === inv.item_id)?.type;
                     if (type === 'weapon' && !weapons.includes(inv.item_id)) {
@@ -121,6 +136,10 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                         furniture.push(inv.item_id);
                     } else if (type === 'friend' && !friends.includes(inv.item_id)) {
                         friends.push(inv.item_id);
+                    } else if (type === 'top' && !tops.includes(inv.item_id)) {
+                        tops.push(inv.item_id);
+                    } else if (type === 'bottom' && !bottoms.includes(inv.item_id)) {
+                        bottoms.push(inv.item_id);
                     }
                 });
 
@@ -131,7 +150,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                     y: r.y
                 })) || [];
 
-                set({ ownedWeapons: weapons, ownedFurniture: furniture, ownedFriends: friends, roomItems: parsedRoom });
+                set({ ownedWeapons: weapons, ownedFurniture: furniture, ownedFriends: friends, ownedTops: tops, ownedBottoms: bottoms, roomItems: parsedRoom });
             } catch (err) {
                 console.error(err);
             }
