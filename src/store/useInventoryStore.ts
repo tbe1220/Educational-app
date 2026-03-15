@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '@/lib/supabase';
+import { ALL_ITEMS } from '@/data/items';
 import { usePlayerStore } from './usePlayerStore';
 
 export interface RoomItem {
@@ -12,8 +13,9 @@ export interface RoomItem {
 interface InventoryState {
     ownedWeapons: string[];
     ownedFurniture: string[];
+    ownedFriends: string[];
     roomItems: RoomItem[];
-    addItem: (itemType: 'weapon' | 'furniture', itemId: string) => void;
+    addItem: (itemType: 'weapon' | 'furniture' | 'friend', itemId: string) => void;
     moveRoomItem: (id: string, x: number, y: number) => void;
     placeRoomItem: (itemId: string, x: number, y: number) => void;
     removeRoomItem: (id: string) => void;
@@ -62,9 +64,11 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
     return {
         ownedWeapons: [],
         ownedFurniture: [],
+        ownedFriends: [],
         roomItems: [],
-        addItem: (itemType, itemId) => {
+        addItem: (itemTypeArg, itemId) => { // Renamed itemType to itemTypeArg to avoid shadowing
             set((state) => {
+                const itemType = ALL_ITEMS.find(i => i.id === itemId)?.type; // Derives itemType from ALL_ITEMS
                 if (itemType === 'weapon' && !state.ownedWeapons.includes(itemId)) {
                     addDbItem('weapon', itemId);
                     return { ownedWeapons: [...state.ownedWeapons, itemId] };
@@ -72,6 +76,10 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                 if (itemType === 'furniture' && !state.ownedFurniture.includes(itemId)) {
                     addDbItem('furniture', itemId);
                     return { ownedFurniture: [...state.ownedFurniture, itemId] };
+                }
+                if (itemType === 'friend' && !state.ownedFriends.includes(itemId)) {
+                    addDbItem('friend', itemId);
+                    return { ownedFriends: [...state.ownedFriends, itemId] };
                 }
                 return state;
             });
@@ -99,11 +107,22 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
         },
         loadInventory: async (userId: string) => {
             try {
-                const { data: invData } = await supabase.from('inventory').select('*').eq('user_id', userId);
+                const { data: inventoryData } = await supabase.from('inventory').select('*').eq('user_id', userId);
                 const { data: roomData } = await supabase.from('room_items').select('*').eq('user_id', userId);
 
-                const weapons = invData?.filter(i => i.item_type === 'weapon').map(i => i.item_id) || [];
-                const furniture = invData?.filter(i => i.item_type === 'furniture').map(i => i.item_id) || [];
+                const weapons = ['w1']; // Default weapon
+                const furniture: string[] = [];
+                const friends: string[] = [];
+                inventoryData?.forEach((inv: any) => {
+                    const type = ALL_ITEMS.find(i => i.id === inv.item_id)?.type;
+                    if (type === 'weapon' && !weapons.includes(inv.item_id)) {
+                        weapons.push(inv.item_id);
+                    } else if (type === 'furniture' && !furniture.includes(inv.item_id)) {
+                        furniture.push(inv.item_id);
+                    } else if (type === 'friend' && !friends.includes(inv.item_id)) {
+                        friends.push(inv.item_id);
+                    }
+                });
 
                 const parsedRoom: RoomItem[] = roomData?.map(r => ({
                     id: r.id,
@@ -112,7 +131,7 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                     y: r.y
                 })) || [];
 
-                set({ ownedWeapons: weapons, ownedFurniture: furniture, roomItems: parsedRoom });
+                set({ ownedWeapons: weapons, ownedFurniture: furniture, ownedFriends: friends, roomItems: parsedRoom });
             } catch (err) {
                 console.error(err);
             }

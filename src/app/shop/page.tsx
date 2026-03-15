@@ -150,6 +150,42 @@ export default function ShopPage() {
                             })}
                         </div>
                     </div>
+
+                    {/* Friends Section */}
+                    <div className="bg-pink-50/50 p-6 rounded-[2rem] border-4 border-pink-100 mb-12">
+                        <h2 className="text-3xl font-bold text-pink-500 mb-6 flex items-center gap-2">
+                            <span>💖</span> おともだち に なる (おへや に よぶ)
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {ALL_ITEMS.filter(i => i.type === 'friend').map(item => {
+                                const isOwned = useInventoryStore.getState().ownedFriends.includes(item.id);
+                                const canAfford = points >= item.price;
+                                return (
+                                    <motion.div
+                                        key={item.id}
+                                        whileHover={!isOwned ? { scale: 1.05 } : {}}
+                                        whileTap={!isOwned ? { scale: 0.95 } : {}}
+                                        onClick={() => !isOwned && handleSelectItem(item)}
+                                        className={`
+                                            p-4 rounded-3xl border-4 shadow-md flex flex-col items-center justify-between text-center cursor-pointer min-h-[160px]
+                                            ${isOwned ? 'bg-gray-200 border-gray-300 opacity-60 cursor-not-allowed' :
+                                                canAfford ? 'bg-white border-pink-400 hover:border-pink-500' : 'bg-red-50 border-red-200'}
+                                        `}
+                                    >
+                                        <div className="text-5xl mb-2">{item.emoji}</div>
+                                        <div className="font-bold text-gray-700 text-sm h-10">{item.name}</div>
+                                        {isOwned ? (
+                                            <div className="mt-2 text-gray-500 font-bold bg-gray-300 px-3 py-1 rounded-full text-xs">なかま</div>
+                                        ) : (
+                                            <div className={`mt-2 font-bold px-3 py-1 rounded-full text-xs flex items-center gap-1 ${canAfford ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-500'}`}>
+                                                <Coins className="w-3 h-3" /> {item.price}
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             )}
 

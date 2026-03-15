@@ -13,7 +13,7 @@ import AppButton from "@/components/ui/Button";
 export default function MyRoomPage() {
     const router = useRouter();
     const { hp, maxHp, points, level, equippedWeaponId, equipWeapon } = usePlayerStore();
-    const { ownedWeapons, ownedFurniture, roomItems, placeRoomItem, moveRoomItem } = useInventoryStore();
+    const { ownedWeapons, ownedFurniture, ownedFriends, roomItems, placeRoomItem, moveRoomItem } = useInventoryStore();
 
     const [activeTab, setActiveTab] = useState<'room' | 'inventory'>('room');
     const roomRef = useRef<HTMLDivElement>(null);
@@ -150,9 +150,11 @@ export default function MyRoomPage() {
 
                     <div className="flex-1 overflow-y-auto">
                         <div className="mb-12">
-                            <h3 className="text-2xl font-bold text-pop-orange mb-4 border-b-4 border-orange-200 pb-2">かぐ (おへや に おく)</h3>
+                            <h3 className="text-2xl font-bold text-pop-orange mb-4 border-b-4 border-orange-200 pb-2">かぐ・おともだち (おへや に おく)</h3>
                             <div className="flex gap-4 flex-wrap">
-                                {ownedFurniture.length === 0 ? <p className="text-gray-400 font-bold">まだ かぐ を もっていないよ。</p> : null}
+                                {ownedFurniture.length === 0 && ownedFriends.length === 0 ? <p className="text-gray-400 font-bold">まだ もっていないよ。</p> : null}
+
+                                {/* Render Furniture */}
                                 {ownedFurniture.map(fid => {
                                     const itemInfo = ALL_ITEMS.find(i => i.id === fid);
                                     if (!itemInfo) return null;
@@ -167,6 +169,26 @@ export default function MyRoomPage() {
                                             <div className="font-bold text-gray-700 text-sm h-10">{itemInfo.name}</div>
                                             <AppButton color="orange" size="md" className="!py-2 !text-lg w-full" onClick={() => spawnFurniture(fid)}>
                                                 へやに おく
+                                            </AppButton>
+                                        </div>
+                                    )
+                                })}
+
+                                {/* Render Friends */}
+                                {ownedFriends.map(fid => {
+                                    const itemInfo = ALL_ITEMS.find(i => i.id === fid);
+                                    if (!itemInfo) return null;
+                                    return (
+                                        <div
+                                            key={fid}
+                                            className="bg-pink-50 p-4 rounded-3xl border-4 border-pink-200 flex flex-col items-center w-40 text-center gap-2"
+                                            draggable
+                                            onDragStart={(e) => e.dataTransfer.setData("itemId", fid)}
+                                        >
+                                            <div className="text-6xl mb-2">{itemInfo.emoji}</div>
+                                            <div className="font-bold text-gray-700 text-sm h-10">{itemInfo.name}</div>
+                                            <AppButton color="red" size="md" className="!py-2 !text-lg w-full" onClick={() => spawnFurniture(fid)}>
+                                                へやに よぶ
                                             </AppButton>
                                         </div>
                                     )
