@@ -54,10 +54,17 @@ const ENGLISH_DATA: EnglishQuestion[] = [
     { id: 'ep12', category: 'phrases', englishText: 'I like apples.', japaneseMeaning: 'りんごがすき', choices: ['りんごがきらい', 'りんごがすき', 'みかんがすき', 'ばなながすき'], explanationText: 'I like は「すき」という意味だよ。' },
 
     // Additional Sentences requested (Normal/Hard)
-    { id: 'ep13', category: 'phrases', englishText: 'I am looking for ~', japaneseMeaning: '〜をさがしている', choices: ['〜をみつけた', '〜をうっている', '〜をさがしている', '〜をかっている'], explanationText: 'Looking for は「〜をさがしている」という意味だよ。' },
-    { id: 'ep14', category: 'phrases', englishText: 'I want to learn English.', japaneseMeaning: 'えいごをならいたい', choices: ['えいごをはなせる', 'えいごをならいたい', 'えいごがすき', 'えいごがむずかしい'], explanationText: 'want to learn は「ならいたい」という意味だよ。' },
-    { id: 'ep15', category: 'phrases', englishText: 'Can I ~ ?', japaneseMeaning: '〜してもいい？', choices: ['〜してね', '〜したくない', '〜してもいい？', '〜できるよ'], explanationText: 'Can I ~ ? は「自分が〜してもいい？」と聞くときにつかうよ。' },
-    { id: 'ep16', category: 'phrases', englishText: 'I like ~', japaneseMeaning: '〜がすき', choices: ['〜がきらい', '〜がすき', '〜がほしい', '〜になりたい'], explanationText: 'I like は「すき」という意味だよ。' },
+    // Additional Sentences requested (Normal/Hard)
+    { id: 'ep13', category: 'phrases', englishText: 'I\'m looking for my toy.', japaneseMeaning: 'おもちゃを さがしている', choices: ['おもちゃを みつけた', 'おもちゃを かっている', 'おもちゃを さがしている', 'おもちゃを なくした'], explanationText: 'Looking for は「さがしている」という意味だよ。' },
+    { id: 'ep14', category: 'phrases', englishText: 'I want to learn English.', japaneseMeaning: 'えいごを ならいたい', choices: ['えいごを はなせる', 'えいごを ならいたい', 'えいごが すき', 'えいごが むずかしい'], explanationText: 'want to learn は「ならいたい」という意味だよ。' },
+    { id: 'ep15', category: 'phrases', englishText: 'I\'m looking for a rainbow beetle.', japaneseMeaning: 'ニジイロクワガタを さがしている', choices: ['かぶとむしを つかまえた', 'ニジイロクワガタを さがしている', 'てんとうむしが すき', 'くわがたを もっている'], explanationText: 'rainbow beetle は「ニジイロクワガタ」だよ。' },
+    { id: 'ep16', category: 'phrases', englishText: 'Can I borrow your crayon?', japaneseMeaning: 'クレヨンを かりてもいい？', choices: ['クレヨンを かしてね', 'クレヨンを かりてもいい？', 'クレヨンを あげるよ', 'クレヨンを つかっているよ'], explanationText: 'Can I borrow は「かりてもいい？」と聞くときにつかうよ。' },
+    { id: 'ep17', category: 'phrases', englishText: 'Can I have a cookie?', japaneseMeaning: 'クっきーを もらってもいい？', choices: ['クッキーを あげるよ', 'クッキーを もらってもいい？', 'クッキーが きらい', 'クッキーを たべたよ'], explanationText: 'Can I have は「もらってもいい？」と聞くときにつかうよ。' },
+    { id: 'ep18', category: 'phrases', englishText: 'Help me.', japaneseMeaning: 'たすけて', choices: ['ありがとう', 'こっちにきて', 'たすけて', 'がんばって'], explanationText: 'Help me は「たすけて」と おねがいする ことばだよ。' },
+    { id: 'ep19', category: 'phrases', englishText: 'Wait a minute.', japaneseMeaning: 'ちょっと まって', choices: ['いそいで', 'ちょっと まって', 'もう いいよ', 'さあ いこう'], explanationText: 'Wait a minute は「ちょっと まって」という意味だよ。' },
+    { id: 'ep20', category: 'phrases', englishText: 'You\'re welcome.', japaneseMeaning: 'どういたしまして', choices: ['ありがとう', 'ごめんなさい', 'こんにちは', 'どういたしまして'], explanationText: 'You\'re welcome は ありがとう と言われた時に返す「どういたしまして」だよ。' },
+    { id: 'ep21', category: 'phrases', englishText: 'I don\'t know.', japaneseMeaning: 'わからない', choices: ['しっているよ', 'わからない', 'きいてみて', 'わすれた'], explanationText: 'I don\'t know は「わからない」「しらない」という意味だよ。' },
+    { id: 'ep22', category: 'phrases', englishText: 'Come here.', japaneseMeaning: 'こっちにきて', choices: ['あっちにいって', 'ちょっと まって', 'こっちにきて', 'いっしょにあそぼう'], explanationText: 'Come here は「こっちにきて」とよぶ ことばだよ。' }
 ];
 
 const RECENT_ENGLISH_HISTORY_SIZE = 5;

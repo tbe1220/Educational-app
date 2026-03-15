@@ -133,12 +133,12 @@ const EXTRA_SETS: Record<string, WordSet> = {
         category: 'ことばの いみ',
         questionPrompt: 'これは どんな いみ？',
         items: [
-            { text: 'みぎと ひだり', hint: 'さゆう。', emoji: '左右' },
-            { text: 'うえと した', hint: 'じょうげ。', emoji: '上下' },
-            { text: 'みずの たま', hint: 'みずたま。', emoji: '水玉' },
-            { text: 'あおくて きれいな そら', hint: 'あおぞら。', emoji: '青空' },
-            { text: 'いえや びる', hint: 'たてもの。', emoji: '建物' },
-            { text: 'あさと ゆうがた', hint: 'ちょうせき。', emoji: '朝夕' },
+            { text: 'みぎと ひだり', hint: 'さゆう。', emoji: 'さゆう' },
+            { text: 'うえと した', hint: 'じょうげ。', emoji: 'じょうげ' },
+            { text: 'みずの たま', hint: 'みずたま。', emoji: 'みずたま' },
+            { text: 'あおくて きれいな そら', hint: 'あおぞら。', emoji: 'あおぞら' },
+            { text: 'いえや びる', hint: 'たてもの。', emoji: 'たてもの' },
+            { text: 'あさと ゆうがた', hint: 'ちょうせき。', emoji: 'ちょうせき' },
         ]
     }
 };

@@ -29,13 +29,27 @@ const generateChoices = (correct: number, count: number = 4): number[] => {
 };
 
 export const generateAddition = (difficulty: string): MathQuestion => {
-    let maxSum = 100; // was 30
-    if (difficulty === 'easy') maxSum = 20; // was 10
-    if (difficulty === 'hard') maxSum = 500; // was 100
+    let a, b, answer;
 
-    const a = Math.floor(Math.random() * (maxSum - 1)) + 1;
-    const b = Math.floor(Math.random() * (maxSum - a)) + 1;
-    const answer = a + b;
+    if (difficulty === 'normal') {
+        const isTenBase = Math.random() < 0.3; // 30% chance for 10-based addition (e.g. 20+30)
+        if (isTenBase) {
+            a = (Math.floor(Math.random() * 9) + 1) * 10; // 10, 20...90
+            b = (Math.floor(Math.random() * 9) + 1) * 10; // 10, 20...90
+            answer = a + b;
+        } else {
+            answer = Math.floor(Math.random() * 21) + 10; // Answer between 10 and 30
+            a = Math.floor(Math.random() * (answer - 1)) + 1;
+            b = answer - a;
+        }
+    } else {
+        let maxSum = 100;
+        if (difficulty === 'easy') maxSum = 20;
+        if (difficulty === 'hard') maxSum = 500;
+        a = Math.floor(Math.random() * (maxSum - 1)) + 1;
+        b = Math.floor(Math.random() * (maxSum - a)) + 1;
+        answer = a + b;
+    }
 
     return {
         id: crypto.randomUUID(),
@@ -43,14 +57,14 @@ export const generateAddition = (difficulty: string): MathQuestion => {
         questionStr: `${a} ＋ ${b} ＝`,
         correctAnswer: answer,
         choices: generateChoices(answer),
-        hintDots: a
+        hintDots: a < 30 ? a : undefined
     };
 };
 
 const generateSubtraction = (difficulty: string): MathQuestion => {
-    let maxVal = 50; // was 20
-    if (difficulty === 'easy') maxVal = 15; // was 10
-    if (difficulty === 'hard') maxVal = 200; // was 50
+    let maxVal = 29; // Normal: a < 30
+    if (difficulty === 'easy') maxVal = 15;
+    if (difficulty === 'hard') maxVal = 200;
 
     const a = Math.floor(Math.random() * maxVal) + 5;
     const b = Math.floor(Math.random() * (a - 1)) + 1;
@@ -149,7 +163,7 @@ const generateClock = (difficulty: string): MathQuestion => {
         hintDots: undefined
     };
 };
-const RECENT_MATH_HISTORY_SIZE = 5;
+const RECENT_MATH_HISTORY_SIZE = 15;
 const recentMathQuestions: string[] = [];
 
 // Generate a random math question based on selected difficulty
@@ -171,7 +185,7 @@ export const generateMathQuestion = (): MathQuestion => {
     let question: MathQuestion | null = null;
     let attempts = 0;
 
-    while (attempts < 15) { // increased attempt count to compensate for stricter history
+    while (attempts < 50) { // increased attempt count for stricter history
         type = types[Math.floor(Math.random() * types.length)];
         switch (type) {
             case 'addition': question = generateAddition(difficulty); break;
