@@ -19,13 +19,6 @@ export default function MyRoomPage() {
     const roomRef = useRef<HTMLDivElement>(null);
 
     const handleDragEnd = (instanceId: string, event: any, info: any) => {
-        // Trash Detection: bottom 120px of the screen
-        if (info.point.y > window.innerHeight - 120) {
-            playSound('click'); // or a poof sound
-            useInventoryStore.getState().removeRoomItem(instanceId);
-            return;
-        }
-
         playSound('click');
         const item = roomItems.find(i => i.id === instanceId);
         if (item) {
@@ -80,11 +73,11 @@ export default function MyRoomPage() {
 
                 {/* ROOM VIEW */}
                 <div
-                    className={`flex-1 relative transition-opacity duration-300 ${activeTab === 'room' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                    className={`flex-1 relative transition-opacity duration-300 overflow-auto scroll-smooth ${activeTab === 'room' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
                     ref={roomRef}
                 >
-                    {/* Room Background */}
-                    <div className="absolute inset-4 md:inset-8 bg-sky-100 rounded-[3rem] shadow-inner border-8 border-orange-200 overflow-hidden flex">
+                    {/* Room Background Container (Expanded for scrolling) */}
+                    <div className="absolute inset-4 md:inset-8 min-w-[150vw] min-h-[150vh] bg-sky-100 rounded-[3rem] shadow-inner border-8 border-orange-200 overflow-hidden flex">
                         {/* Left Side: Room (Indoors) */}
                         <div className="flex-1 h-full relative border-r-4 border-orange-300">
                             {/* Wall */}
@@ -97,13 +90,14 @@ export default function MyRoomPage() {
                         <div className="flex-1 h-full relative">
                             {/* Sky */}
                             <div className="absolute top-0 w-full h-1/2 bg-sky-200 overflow-hidden">
-                                <div className="absolute top-4 right-4 text-6xl opacity-80">☁️</div>
-                                <div className="absolute top-12 right-24 text-4xl opacity-60">☁️</div>
+                                <div className="absolute top-10 right-10 text-6xl opacity-80">☁️</div>
+                                <div className="absolute top-32 right-64 text-4xl opacity-60">☁️</div>
+                                <div className="absolute top-20 left-32 text-7xl opacity-90">☁️</div>
                             </div>
                             {/* Farm Dirt */}
-                            <div className="absolute bottom-0 w-full h-1/2 bg-amber-700 border-t-8 border-green-500 flex justify-center pt-8">
-                                <div className="text-4xl text-amber-800 opacity-50 space-x-4">
-                                    <span>〰️</span><span>〰️</span><span>〰️</span>
+                            <div className="absolute bottom-0 w-full h-1/2 bg-amber-700 border-t-8 border-green-500 flex justify-center pt-16">
+                                <div className="text-4xl text-amber-800 opacity-50 space-x-8">
+                                    <span>〰️</span><span>〰️</span><span>〰️</span><span>〰️</span><span>〰️</span>
                                 </div>
                             </div>
                         </div>
@@ -170,9 +164,11 @@ export default function MyRoomPage() {
                             );
                         })}
 
-                        {/* Trash Zone */}
-                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-pop-red/90 text-white px-8 py-4 rounded-full font-bold text-2xl shadow-xl border-4 border-white flex items-center gap-4 z-40 pointer-events-none backdrop-blur-sm">
-                            <span className="text-4xl text-white">🚮</span> ここにポイッ！（おかたづけ）
+                        {/* Trash Zone Guidance (Fixed to bottom right of viewport) */}
+                        <div className="fixed bottom-6 right-6 bg-white/90 text-gray-700 px-6 py-3 rounded-2xl font-bold text-lg shadow-lg border-2 border-dashed border-pop-red flex flex-col items-center z-40 pointer-events-none backdrop-blur-sm">
+                            <span className="text-3xl mb-1">🚮</span>
+                            <span className="text-xs">アイテムの ✕ をおして</span>
+                            <span className="text-sm text-pop-red">おかたづけ</span>
                         </div>
                     </div>
                 </div>

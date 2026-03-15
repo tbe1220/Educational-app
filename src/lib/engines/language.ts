@@ -58,7 +58,7 @@ const getCategories = (difficulty: string) => {
     } else if (difficulty === 'hard') {
         return ['countries', 'safety', 'animals_hard', 'tracing', 'jukugo'];
     }
-    return ['bugs', 'countries', 'safety', 'tracing', 'jukugo'];
+    return ['bugs', 'countries', 'safety', 'tracing', 'jukugo', 'countries_new', 'animals_new', 'vehicles_new'];
 };
 
 interface WordSetItem {
@@ -139,6 +139,42 @@ const EXTRA_SETS: Record<string, WordSet> = {
             { text: 'あおくて きれいな そら', hint: 'あおぞら。', emoji: 'あおぞら' },
             { text: 'いえや びる', hint: 'たてもの。', emoji: 'たてもの' },
             { text: 'あさと ゆうがた', hint: 'ちょうせき。', emoji: 'ちょうせき' },
+        ]
+    },
+    countries_new: {
+        category: 'せかいの くに',
+        questionPrompt: 'これは どんな くに？',
+        items: [
+            { text: 'イタリア', hint: 'ぴざが ゆうめい', emoji: '🍕' },
+            { text: 'オーストラリア', hint: 'こあらが いる', emoji: '🐨' },
+            { text: 'インド', hint: 'かれーが ゆうめい', emoji: '🍛' },
+            { text: 'アメリカ', hint: 'はんばーがー', emoji: '🍔' },
+            { text: 'エジプト', hint: 'ぴらみっど', emoji: '🐪' },
+            { text: 'にほん', hint: 'おすし', emoji: '🍣' },
+        ]
+    },
+    animals_new: {
+        category: 'いきもの',
+        questionPrompt: 'これは どんな いきもの？',
+        items: [
+            { text: 'キリン', hint: 'くびが ながい', emoji: '🦒' },
+            { text: 'ゾウ', hint: 'おはなが ながい', emoji: '🐘' },
+            { text: 'ライオン', hint: 'どうぶつの おうさま', emoji: '🦁' },
+            { text: 'イヌ', hint: 'わんわんと なく', emoji: '🐶' },
+            { text: 'ネコ', hint: 'にゃーと なく', emoji: '🐱' },
+            { text: 'ウサギ', hint: 'みみが ながい', emoji: '🐰' },
+        ]
+    },
+    vehicles_new: {
+        category: 'のりもの',
+        questionPrompt: 'これは どんな のりもの？',
+        items: [
+            { text: 'きゅうきゅうしゃ', hint: 'しろくて けがにんを はこぶ', emoji: '🚑' },
+            { text: 'しょうぼうしゃ', hint: 'あかくて ひを けす', emoji: '🚒' },
+            { text: 'パトカー', hint: 'けいさつかん が のる', emoji: '🚓' },
+            { text: 'ひこうき', hint: 'そらを とぶ', emoji: '✈️' },
+            { text: 'でんしゃ', hint: 'せんろを はしる', emoji: '🚃' },
+            { text: 'ふね', hint: 'うみを すすむ', emoji: '⛴️' },
         ]
     }
 };
