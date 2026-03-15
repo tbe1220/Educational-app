@@ -26,7 +26,7 @@ export const FURNITURE: GameItem[] = [
     { id: 'f1', name: 'きぼのいす', type: 'furniture', price: 20, emoji: '🪑' },
     { id: 'f2', name: 'あかいいす', type: 'furniture', price: 30, emoji: '🪑' },
     { id: 'f3', name: 'ベッド', type: 'furniture', price: 100, emoji: '🛏️' },
-    { id: 'f4', name: 'テーブル', type: 'furniture', price: 80, emoji: '🍽️' },
+    { id: 'f4', name: 'テーブル', type: 'furniture', price: 80, emoji: '🪵' },
     { id: 'f5', name: 'れいぞうこ', type: 'furniture', price: 300, emoji: '🧊' },
     { id: 'f6', name: 'テレビ', type: 'furniture', price: 500, emoji: '📺' },
     { id: 'f7', name: 'パソコン', type: 'furniture', price: 800, emoji: '💻' },
@@ -36,14 +36,15 @@ export const FURNITURE: GameItem[] = [
     // 10 New requested furniture types
     { id: 'f11', name: 'まもりの かべ', type: 'furniture', price: 400, emoji: '🧱' },
     { id: 'f12', name: 'おとしあなの わな', type: 'furniture', price: 350, emoji: '🕳️' },
-    { id: 'f13', name: 'おおきな テーブル', type: 'furniture', price: 200, emoji: '🍳' },
+    { id: 'f13', name: 'おおきな テーブル', type: 'furniture', price: 200, emoji: '🪵' },
     { id: 'f14', name: 'ほんだな', type: 'furniture', price: 220, emoji: '📚' },
-    { id: 'f15', name: 'かんようしょくぶつ', type: 'furniture', price: 180, emoji: '🪴' },
+    { id: 'f15', name: 'かんようしょくぶつ', type: 'furniture', price: 180, emoji: '🌿' },
     { id: 'f16', name: 'ふかふか ソファ', type: 'furniture', price: 320, emoji: '🛋️' },
     { id: 'f17', name: 'おおきな とけい', type: 'furniture', price: 280, emoji: '🕰️' },
     { id: 'f18', name: 'あたたかい ラグ', type: 'furniture', price: 150, emoji: '🧶' },
     { id: 'f19', name: 'ゴミばこ', type: 'furniture', price: 50, emoji: '🗑️' },
     { id: 'f20', name: 'あかるい ランプ', type: 'furniture', price: 160, emoji: '💡' },
+    { id: 'f21', name: 'あたたかい たきび', type: 'furniture', price: 500, emoji: '🔥' },
 ];
 
 export const ALL_ITEMS = [...WEAPONS, ...FURNITURE];
