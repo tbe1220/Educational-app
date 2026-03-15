@@ -52,6 +52,12 @@ const ENGLISH_DATA: EnglishQuestion[] = [
     { id: 'ec4', category: 'colors', englishText: 'Green', japaneseMeaning: 'みどり', choices: ['あお', 'あか', 'きいろ', 'みどり'], explanationText: 'Green は はっぱの いろ、「みどり」だよ。' },
     { id: 'ep11', category: 'phrases', englishText: 'Good night.', japaneseMeaning: 'おやすみなさい', choices: ['おはよう', 'こんにちは', 'おやすみなさい', 'さようなら'], explanationText: 'Good night は ねるまえに いう「おやすみなさい」だよ。' },
     { id: 'ep12', category: 'phrases', englishText: 'I like apples.', japaneseMeaning: 'りんごがすき', choices: ['りんごがきらい', 'りんごがすき', 'みかんがすき', 'ばなながすき'], explanationText: 'I like は「すき」という意味だよ。' },
+
+    // Additional Sentences requested (Normal/Hard)
+    { id: 'ep13', category: 'phrases', englishText: 'I am looking for ~', japaneseMeaning: '〜をさがしている', choices: ['〜をみつけた', '〜をうっている', '〜をさがしている', '〜をかっている'], explanationText: 'Looking for は「〜をさがしている」という意味だよ。' },
+    { id: 'ep14', category: 'phrases', englishText: 'I want to learn English.', japaneseMeaning: 'えいごをならいたい', choices: ['えいごをはなせる', 'えいごをならいたい', 'えいごがすき', 'えいごがむずかしい'], explanationText: 'want to learn は「ならいたい」という意味だよ。' },
+    { id: 'ep15', category: 'phrases', englishText: 'Can I ~ ?', japaneseMeaning: '〜してもいい？', choices: ['〜してね', '〜したくない', '〜してもいい？', '〜できるよ'], explanationText: 'Can I ~ ? は「自分が〜してもいい？」と聞くときにつかうよ。' },
+    { id: 'ep16', category: 'phrases', englishText: 'I like ~', japaneseMeaning: '〜がすき', choices: ['〜がきらい', '〜がすき', '〜がほしい', '〜になりたい'], explanationText: 'I like は「すき」という意味だよ。' },
 ];
 
 const RECENT_ENGLISH_HISTORY_SIZE = 5;
