@@ -33,13 +33,62 @@ const TRACING_QUESTIONS: LanguageQuestion[] = [
     { id: 't2', category: 'tracing', questionStr: '「くるま」の さいごの もじは？', correctAnswer: 'ま', choices: ['ま', 'る', 'く', 'た'] },
     { id: 't3', category: 'tracing', questionStr: '「でんしゃ」の さいしょの もじは？', correctAnswer: 'で', choices: ['で', 'ん', 'し', 'や'] },
 
-    // Hiragana stroke counts
-    { id: 'tc1', category: 'tracing', questionStr: '「あ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
-    { id: 'tc2', category: 'tracing', questionStr: '「い」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
-    { id: 'tc3', category: 'tracing', questionStr: '「う」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
-    { id: 'tc4', category: 'tracing', questionStr: '「く」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
-    { id: 'tc5', category: 'tracing', questionStr: '「す」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
-    { id: 'tc6', category: 'tracing', questionStr: '「き」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
+    // Hiragana stroke counts (50 sounds)
+    { id: 'tca', category: 'tracing', questionStr: '「あ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tci', category: 'tracing', questionStr: '「い」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcu', category: 'tracing', questionStr: '「う」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tce', category: 'tracing', questionStr: '「え」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tco', category: 'tracing', questionStr: '「お」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
+
+    { id: 'tcka', category: 'tracing', questionStr: '「か」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcki', category: 'tracing', questionStr: '「き」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
+    { id: 'tcku', category: 'tracing', questionStr: '「く」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcke', category: 'tracing', questionStr: '「け」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcko', category: 'tracing', questionStr: '「こ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+
+    { id: 'tcsa', category: 'tracing', questionStr: '「さ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcsi', category: 'tracing', questionStr: '「し」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcsu', category: 'tracing', questionStr: '「す」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcse', category: 'tracing', questionStr: '「せ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcso', category: 'tracing', questionStr: '「そ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] }, // Also 1 or 2 depending on font, standard is 1.
+
+    { id: 'tcta', category: 'tracing', questionStr: '「た」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
+    { id: 'tchi', category: 'tracing', questionStr: '「ち」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tctsu', category: 'tracing', questionStr: '「つ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcte', category: 'tracing', questionStr: '「て」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcto', category: 'tracing', questionStr: '「と」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+
+    { id: 'tcna', category: 'tracing', questionStr: '「な」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
+    { id: 'tcni', category: 'tracing', questionStr: '「に」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcnu', category: 'tracing', questionStr: '「ぬ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcne', category: 'tracing', questionStr: '「ね」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcno', category: 'tracing', questionStr: '「の」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+
+    { id: 'tcha', category: 'tracing', questionStr: '「は」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tchi', category: 'tracing', questionStr: '「ひ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcfu', category: 'tracing', questionStr: '「ふ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] }, // Standard is 4
+    { id: 'tche', category: 'tracing', questionStr: '「へ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcho', category: 'tracing', questionStr: '「ほ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '4かい', choices: ['2かい', '3かい', '4かい', '5かい'] },
+
+    { id: 'tcma', category: 'tracing', questionStr: '「ま」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcmi', category: 'tracing', questionStr: '「み」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcmu', category: 'tracing', questionStr: '「む」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcme', category: 'tracing', questionStr: '「め」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcmo', category: 'tracing', questionStr: '「も」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+
+    { id: 'tcya', category: 'tracing', questionStr: '「や」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcyu', category: 'tracing', questionStr: '「ゆ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcyo', category: 'tracing', questionStr: '「よ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+
+    { id: 'tcra', category: 'tracing', questionStr: '「ら」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcri', category: 'tracing', questionStr: '「り」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcru', category: 'tracing', questionStr: '「る」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcre', category: 'tracing', questionStr: '「れ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcro', category: 'tracing', questionStr: '「ろ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+
+    { id: 'tcwa', category: 'tracing', questionStr: '「わ」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '2かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcwo', category: 'tracing', questionStr: '「を」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '3かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
+    { id: 'tcnn', category: 'tracing', questionStr: '「ん」 は なんかいで かくかな？（かきじゅん）', correctAnswer: '1かい', choices: ['1かい', '2かい', '3かい', '4かい'] },
 ];
 
 const VEHICLE_QUESTIONS: LanguageQuestion[] = [
@@ -151,6 +200,10 @@ const EXTRA_SETS: Record<string, WordSet> = {
             { text: 'アメリカ', hint: 'はんばーがー', emoji: '🍔' },
             { text: 'エジプト', hint: 'ぴらみっど', emoji: '🐪' },
             { text: 'にほん', hint: 'おすし', emoji: '🍣' },
+            { text: 'ロシア', hint: 'せかいで いちばん おおきい くに', emoji: '🇷🇺' },
+            { text: 'バチカンしこく', hint: 'せかいで いちばん ちいさい くに', emoji: '🇻🇦' },
+            { text: 'ブラジル', hint: 'あまぞんがわ が ある', emoji: '🇧🇷' },
+            { text: 'フランス', hint: 'えっふぇるとう が ある', emoji: '🗼' },
         ]
     },
     animals_new: {

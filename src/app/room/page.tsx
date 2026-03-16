@@ -20,10 +20,16 @@ export default function MyRoomPage() {
 
     const handleDragEnd = (instanceId: string, event: any, info: any) => {
         playSound('click');
-        const item = roomItems.find(i => i.id === instanceId);
-        if (item) {
-            moveRoomItem(instanceId, item.x + info.offset.x, item.y + info.offset.y);
-        }
+        const rect = roomRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        // info.point is relative to viewport. 
+        // rect.left/top are relative to viewport (and negative when scrolled).
+        // So info.point.x - rect.left gives the position inside the scrollable container.
+        const newX = info.point.x - rect.left - 50; // offset by center of 100px item
+        const newY = info.point.y - rect.top - 50;  // offset by center of 100px item
+
+        moveRoomItem(instanceId, newX, newY);
     };
 
     const spawnFurniture = (itemId: string) => {
@@ -139,11 +145,17 @@ export default function MyRoomPage() {
                                     drag
                                     dragMomentum={false}
                                     onDragEnd={(e, info) => handleDragEnd(instance.id, e, info)}
-                                    initial={{ x: instance.x, y: instance.y, scale: 0 }}
-                                    animate={{ scale: 1 }}
+                                    // Remove initial={...} animate={...} style={...} as they conflict with drag offset state
+                                    // Instead, use absolute positioning with left/top for the base coordinate, 
+                                    // so Framer Motion's drag translation starts from (0,0) relative to this base.
+                                    style={{
+                                        position: 'absolute',
+                                        left: instance.x,
+                                        top: instance.y,
+                                        touchAction: 'none' // Prevent scrolling while dragging item on mobile
+                                    }}
                                     whileDrag={{ scale: 1.1, zIndex: 50 }}
-                                    className="absolute text-7xl cursor-move drop-shadow-xl z-10 group"
-                                    style={{ x: instance.x, y: instance.y }}
+                                    className="text-7xl cursor-move drop-shadow-xl z-10 group"
                                 >
                                     {itemInfo.emoji}
                                     <button

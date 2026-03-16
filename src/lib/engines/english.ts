@@ -64,7 +64,22 @@ const ENGLISH_DATA: EnglishQuestion[] = [
     { id: 'ep19', category: 'phrases', englishText: 'Wait a minute.', japaneseMeaning: 'ちょっと まって', choices: ['いそいで', 'ちょっと まって', 'もう いいよ', 'さあ いこう'], explanationText: 'Wait a minute は「ちょっと まって」という意味だよ。' },
     { id: 'ep20', category: 'phrases', englishText: 'You\'re welcome.', japaneseMeaning: 'どういたしまして', choices: ['ありがとう', 'ごめんなさい', 'こんにちは', 'どういたしまして'], explanationText: 'You\'re welcome は ありがとう と言われた時に返す「どういたしまして」だよ。' },
     { id: 'ep21', category: 'phrases', englishText: 'I don\'t know.', japaneseMeaning: 'わからない', choices: ['しっているよ', 'わからない', 'きいてみて', 'わすれた'], explanationText: 'I don\'t know は「わからない」「しらない」という意味だよ。' },
-    { id: 'ep22', category: 'phrases', englishText: 'Come here.', japaneseMeaning: 'こっちにきて', choices: ['あっちにいって', 'ちょっと まって', 'こっちにきて', 'いっしょにあそぼう'], explanationText: 'Come here は「こっちにきて」とよぶ ことばだよ。' }
+    { id: 'ep22', category: 'phrases', englishText: 'Come here.', japaneseMeaning: 'こっちにきて', choices: ['あっちにいって', 'ちょっと まって', 'こっちにきて', 'いっしょにあそぼう'], explanationText: 'Come here は「こっちにきて」とよぶ ことばだよ。' },
+
+    // Batch 11 Additions
+    { id: 'ea7', category: 'animals', englishText: 'Giraffe', japaneseMeaning: 'きりん', choices: ['きりん', 'ぞう', 'しまうま', 'かば'], explanationText: 'Giraffe は くびがながい「きりん」だよ。' },
+    { id: 'ea8', category: 'animals', englishText: 'Lion', japaneseMeaning: 'らいおん', choices: ['とら', 'くま', 'らいおん', 'ちーたー'], explanationText: 'Lion は どうぶつの おうさま「らいおん」だよ。' },
+    { id: 'ea9', category: 'animals', englishText: 'Bear', japaneseMeaning: 'くま', choices: ['くま', 'さる', 'いるか', 'きつね'], explanationText: 'Bear は おおきくて つよい「くま」だよ。' },
+    { id: 'ea10', category: 'animals', englishText: 'Tiger', japaneseMeaning: 'とら', choices: ['とら', 'らいおん', 'ねこ', 'ひょう'], explanationText: 'Tiger は しましまもようの「とら」だよ。' },
+    { id: 'ea11', category: 'animals', englishText: 'Pig', japaneseMeaning: 'ぶた', choices: ['ぶた', 'うし', 'にわとり', 'うま'], explanationText: 'Pig は ピンクいろの「ぶた」だよ。ぶひぶひ鳴くよ。' },
+
+    { id: 'ep23', category: 'phrases', englishText: 'It is sunny.', japaneseMeaning: 'はれているね', choices: ['あめがふっている', 'はれているね', 'ゆきがふっている', 'かぜがつよい'], explanationText: 'Sunny は 太陽が出て「はれている」って意味だよ。' },
+    { id: 'ep24', category: 'phrases', englishText: 'Wash your hands.', japaneseMeaning: 'てを あらって', choices: ['てを あらって', 'かおを あらって', 'はを みがいて', 'おふろに はいって'], explanationText: 'Wash your hands は「てを あらって」と言う意味だよ。' },
+    { id: 'ep25', category: 'phrases', englishText: 'Are you ready?', japaneseMeaning: 'じゅんびできた？', choices: ['もう できたよ', 'じゅんびできた？', 'まだだよ', 'いそいで'], explanationText: 'Are you ready は「じゅんびできた？」と聞く言葉だよ。' },
+    { id: 'ep26', category: 'phrases', englishText: 'Where are you?', japaneseMeaning: 'どこにいるの？', choices: ['なにしてるの？', 'どこにいるの？', 'だれといるの？', 'いつかえるの？'], explanationText: 'Where は「どこ」という意味。「どこにいるの？」と探す時に使うよ。' },
+    { id: 'ep27', category: 'phrases', englishText: 'It is fun!', japaneseMeaning: 'たのしい！', choices: ['かなしい', 'さびしい', 'こわい', 'たのしい！'], explanationText: 'fun は「たのしい」という意味だよ。' },
+    { id: 'ep28', category: 'phrases', englishText: 'Good job!', japaneseMeaning: 'よくできたね', choices: ['すごいね', 'よくできたね', 'がんばったね', 'おつかれさま'], explanationText: 'Good job は 頑張った時に褒める「よくできたね」だよ。' },
+    { id: 'ep29', category: 'phrases', englishText: 'Don\'t give up!', japaneseMeaning: 'あきらめないで！', choices: ['あきらめないで！', 'がんばって！', 'もうやめて', 'やすもう'], explanationText: 'Don\'t give up は「あきらめないで！」と応援する言葉だよ。' }
 ];
 
 const RECENT_ENGLISH_HISTORY_SIZE = 5;
