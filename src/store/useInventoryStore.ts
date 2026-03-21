@@ -5,9 +5,15 @@ import { usePlayerStore } from './usePlayerStore';
 
 export interface RoomItem {
     id: string; // unique instance id
-    itemId: string; // reference to GameItem struct
+    itemId: string; // reference to GameItem struct or custom friend uuid
     x: number;
     y: number;
+}
+
+export interface CustomFriend {
+    id: string;
+    dataUrl: string;
+    name: string;
 }
 
 interface InventoryState {
@@ -17,7 +23,10 @@ interface InventoryState {
     ownedTops: string[];
     ownedBottoms: string[];
     roomItems: RoomItem[];
+    customFriends: CustomFriend[];
     addItem: (itemType: 'weapon' | 'furniture' | 'friend' | 'top' | 'bottom', itemId: string) => void;
+    addCustomFriend: (id: string, dataUrl: string, name: string) => void;
+    removeCustomFriend: (id: string) => void;
     moveRoomItem: (id: string, x: number, y: number) => void;
     placeRoomItem: (itemId: string, x: number, y: number) => void;
     removeRoomItem: (id: string) => void;
@@ -70,6 +79,21 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
         ownedTops: [],
         ownedBottoms: [],
         roomItems: [],
+        customFriends: [],
+        addCustomFriend: (id, dataUrl, name) => {
+            set((state) => {
+                const newFriends = [...state.customFriends, { id, dataUrl, name }];
+                try { localStorage.setItem('customFriends', JSON.stringify(newFriends)); } catch (e) { }
+                return { customFriends: newFriends };
+            });
+        },
+        removeCustomFriend: (id) => {
+            set((state) => {
+                const newFriends = state.customFriends.filter(f => f.id !== id);
+                try { localStorage.setItem('customFriends', JSON.stringify(newFriends)); } catch (e) { }
+                return { customFriends: newFriends };
+            });
+        },
         addItem: (itemTypeArg, itemId) => { // Renamed itemType to itemTypeArg to avoid shadowing
             set((state) => {
                 const itemType = ALL_ITEMS.find(i => i.id === itemId)?.type; // Derives itemType from ALL_ITEMS
@@ -151,6 +175,14 @@ export const useInventoryStore = create<InventoryState>((set, get) => {
                 })) || [];
 
                 set({ ownedWeapons: weapons, ownedFurniture: furniture, ownedFriends: friends, ownedTops: tops, ownedBottoms: bottoms, roomItems: parsedRoom });
+
+                try {
+                    const storedCustom = localStorage.getItem('customFriends');
+                    if (storedCustom) {
+                        set({ customFriends: JSON.parse(storedCustom) });
+                    }
+                } catch (e) { }
+
             } catch (err) {
                 console.error(err);
             }

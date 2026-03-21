@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useInventoryStore } from "@/store/useInventoryStore";
 import { ALL_ITEMS } from "@/data/items";
@@ -10,27 +10,69 @@ import { ArrowLeft, User, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import AppButton from "@/components/ui/Button";
 
+const DraggableRoomItem = ({ instance, itemInfo, roomRef }: { instance: any, itemInfo: any, roomRef: any }) => {
+    // Bind Framer Motion's internal state directly to the saved position
+    const x = useMotionValue(instance.x);
+    const y = useMotionValue(instance.y);
+
+    // Sync if db somehow drastically changed externally
+    useEffect(() => {
+        x.set(instance.x);
+        y.set(instance.y);
+    }, [instance.x, instance.y, x, y]);
+
+    return (
+        <motion.div
+            drag
+            dragConstraints={roomRef}
+            dragMomentum={false}
+            style={{
+                position: 'absolute',
+                x,
+                y,
+                touchAction: 'none'
+            }}
+            onDragEnd={() => {
+                playSound('click');
+                // Read the exact sub-pixel x/y from framer-motion to prevent jumping!
+                useInventoryStore.getState().moveRoomItem(instance.id, x.get(), y.get());
+            }}
+            whileDrag={{ scale: 1.1, zIndex: 50 }}
+            className="cursor-move drop-shadow-xl z-10 group"
+        >
+            {itemInfo.dataUrl ? (
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-pink-400 bg-white shadow-md relative">
+                    <img src={itemInfo.dataUrl} alt={itemInfo.name} className="w-full h-full object-cover" />
+                </div>
+            ) : (
+                <div className="text-7xl">{itemInfo.emoji}</div>
+            )}
+
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    playSound('click');
+                    useInventoryStore.getState().removeRoomItem(instance.id);
+                }}
+                onTouchEnd={(e) => {
+                    e.stopPropagation(); // prevent drag context issue on mobile
+                }}
+                className="absolute -top-2 -right-2 bg-pop-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-md md:opacity-0 md:group-hover:opacity-100 transition-opacity z-50 border-2 border-white"
+                aria-label="かたづける"
+            >
+                ✕
+            </button>
+        </motion.div>
+    );
+};
+
 export default function MyRoomPage() {
     const router = useRouter();
     const { hp, maxHp, points, level, equippedWeaponId, equipWeapon, equippedTopId, equippedBottomId, equipTop, equipBottom } = usePlayerStore();
-    const { ownedWeapons, ownedFurniture, ownedFriends, ownedTops, ownedBottoms, roomItems, placeRoomItem, moveRoomItem } = useInventoryStore();
+    const { ownedWeapons, ownedFurniture, ownedFriends, customFriends, ownedTops, ownedBottoms, roomItems, placeRoomItem, moveRoomItem } = useInventoryStore();
 
     const [activeTab, setActiveTab] = useState<'room' | 'inventory'>('room');
     const roomRef = useRef<HTMLDivElement>(null);
-
-    const handleDragEnd = (instanceId: string, event: any, info: any) => {
-        playSound('click');
-        const rect = roomRef.current?.getBoundingClientRect();
-        if (!rect) return;
-
-        // info.point is relative to viewport. 
-        // rect.left/top are relative to viewport (and negative when scrolled).
-        // So info.point.x - rect.left gives the position inside the scrollable container.
-        const newX = info.point.x - rect.left - 50; // offset by center of 100px item
-        const newY = info.point.y - rect.top - 50;  // offset by center of 100px item
-
-        moveRoomItem(instanceId, newX, newY);
-    };
 
     const spawnFurniture = (itemId: string) => {
         playSound('correct');
@@ -136,43 +178,20 @@ export default function MyRoomPage() {
 
                         {/* Render placed furniture */}
                         {roomItems.map(instance => {
-                            const itemInfo = ALL_ITEMS.find(i => i.id === instance.itemId);
-                            if (!itemInfo) return null;
+                            let itemInfo: any = ALL_ITEMS.find(i => i.id === instance.itemId);
+                            if (!itemInfo) {
+                                // check custom friends
+                                itemInfo = customFriends?.find((c: any) => c.id === instance.itemId);
+                                if (!itemInfo) return null;
+                            }
 
                             return (
-                                <motion.div
+                                <DraggableRoomItem
                                     key={instance.id}
-                                    drag
-                                    dragMomentum={false}
-                                    onDragEnd={(e, info) => handleDragEnd(instance.id, e, info)}
-                                    // Remove initial={...} animate={...} style={...} as they conflict with drag offset state
-                                    // Instead, use absolute positioning with left/top for the base coordinate, 
-                                    // so Framer Motion's drag translation starts from (0,0) relative to this base.
-                                    style={{
-                                        position: 'absolute',
-                                        left: instance.x,
-                                        top: instance.y,
-                                        touchAction: 'none' // Prevent scrolling while dragging item on mobile
-                                    }}
-                                    whileDrag={{ scale: 1.1, zIndex: 50 }}
-                                    className="text-7xl cursor-move drop-shadow-xl z-10 group"
-                                >
-                                    {itemInfo.emoji}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            playSound('click');
-                                            useInventoryStore.getState().removeRoomItem(instance.id);
-                                        }}
-                                        onTouchEnd={(e) => {
-                                            e.stopPropagation(); // prevent drag end conflict usually, but click is better
-                                        }}
-                                        className="absolute -top-2 -right-2 bg-pop-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-md md:opacity-0 md:group-hover:opacity-100 transition-opacity z-50 border-2 border-white"
-                                        aria-label="かたづける"
-                                    >
-                                        ✕
-                                    </button>
-                                </motion.div>
+                                    instance={instance}
+                                    itemInfo={itemInfo}
+                                    roomRef={roomRef}
+                                />
                             );
                         })}
 
@@ -226,12 +245,39 @@ export default function MyRoomPage() {
                                         <div
                                             key={fid}
                                             className="bg-pink-50 p-4 rounded-3xl border-4 border-pink-200 flex flex-col items-center w-40 text-center gap-2"
-                                            draggable
-                                            onDragStart={(e) => e.dataTransfer.setData("itemId", fid)}
                                         >
                                             <div className="text-6xl mb-2">{itemInfo.emoji}</div>
                                             <div className="font-bold text-gray-700 text-sm h-10">{itemInfo.name}</div>
                                             <AppButton color="red" size="md" className="!py-2 !text-lg w-full" onClick={() => spawnFurniture(fid)}>
+                                                へやに よぶ
+                                            </AppButton>
+                                        </div>
+                                    )
+                                })}
+
+                                {/* Render Custom Photo Friends */}
+                                {customFriends?.map((friend: any) => {
+                                    return (
+                                        <div
+                                            key={friend.id}
+                                            className="bg-pink-50/80 p-4 rounded-3xl border-4 border-pink-400 flex flex-col items-center w-40 text-center gap-2 relative shadow-sm"
+                                        >
+                                            <button
+                                                onClick={() => {
+                                                    playSound('click');
+                                                    if (confirm("ほんとうに ばいばい する？（しゃしんが きえます）")) {
+                                                        useInventoryStore.getState().removeCustomFriend(friend.id);
+                                                    }
+                                                }}
+                                                className="absolute -top-2 -right-2 bg-gray-500 hover:bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-md transition-colors z-20 border-2 border-white"
+                                            >
+                                                ✕
+                                            </button>
+                                            <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-300 mb-2">
+                                                <img src={friend.dataUrl} alt={friend.name} className="w-full h-full object-cover" />
+                                            </div>
+                                            <div className="font-bold text-gray-700 text-sm h-10">{friend.name}</div>
+                                            <AppButton color="red" size="md" className="!py-2 !text-lg w-full" onClick={() => spawnFurniture(friend.id)}>
                                                 へやに よぶ
                                             </AppButton>
                                         </div>

@@ -16,10 +16,35 @@ export default function ShopPage() {
     const { ownedWeapons, ownedFurniture, ownedTops, ownedBottoms, addItem } = useInventoryStore();
 
     const [selectedItem, setSelectedItem] = useState<GameItem | null>(null);
-    const [purchaseStage, setPurchaseStage] = useState<'browse' | 'confirm' | 'math' | 'success'>('browse');
+    const [purchaseStage, setPurchaseStage] = useState<'browse' | 'confirm' | 'math' | 'wrong' | 'success'>('browse');
 
     // Math learning state
     const [userChangeInput, setUserChangeInput] = useState<string>("");
+
+    const renderMoney = (amount: number) => {
+        if (amount > 9999) return <div className="text-xl font-bold text-yellow-600">💰 {amount}</div>;
+        const thousands = Math.floor(amount / 1000);
+        const hundreds = Math.floor((amount % 1000) / 100);
+        const tens = Math.floor((amount % 100) / 10);
+        const ones = amount % 10;
+
+        return (
+            <div className="flex flex-wrap gap-1 justify-end max-w-[200px]">
+                {Array.from({ length: thousands }).map((_, i) => (
+                    <div key={`1000-${i}`} className="px-2 py-1 bg-blue-100 border-2 border-blue-300 text-blue-800 font-bold text-[10px] rounded-sm shadow-sm flex items-center">1000札</div>
+                ))}
+                {Array.from({ length: hundreds }).map((_, i) => (
+                    <div key={`100-${i}`} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-gray-400 flex items-center justify-center font-bold text-gray-700 shadow-sm text-[10px]">100円</div>
+                ))}
+                {Array.from({ length: tens }).map((_, i) => (
+                    <div key={`10-${i}`} className="w-7 h-7 rounded-full bg-orange-200 border-2 border-orange-500 flex items-center justify-center font-bold text-orange-800 shadow-sm text-[10px]">10円</div>
+                ))}
+                {Array.from({ length: ones }).map((_, i) => (
+                    <div key={`1-${i}`} className="w-6 h-6 rounded-full bg-yellow-100 border-2 border-yellow-400 flex items-center justify-center font-bold text-yellow-800 shadow-sm text-[9px]">1円</div>
+                ))}
+            </div>
+        );
+    };
 
     const handleSelectItem = (item: GameItem) => {
         playSound('click');
@@ -50,10 +75,11 @@ export default function ShopPage() {
             removePoints(selectedItem.price);
             addItem(selectedItem.type, selectedItem.id);
             setPurchaseStage('success');
-            speakJapanese("ありがとう！ また きてね。");
+            speakJapanese("せいかい！ ありがとう！");
         } else {
             playSound('wrong');
-            speakJapanese(`ちがうみたい。 ${points} から ${selectedItem.price} を ひくと...`);
+            speakJapanese(`ちがうみたい。 せいかい は ${correctChange} だよ。でも アイテム は 買えるよ！`);
+            setPurchaseStage('wrong');
         }
     };
 
@@ -262,17 +288,17 @@ export default function ShopPage() {
             )}
 
             <AnimatePresence>
-                {(purchaseStage === 'confirm' || purchaseStage === 'math' || purchaseStage === 'success') && selectedItem && (
+                {purchaseStage !== 'browse' && selectedItem && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm"
+                        className="fixed inset-0 z-50 bg-black/50 flex flex-col items-center justify-center p-4 backdrop-blur-sm overflow-y-auto"
                     >
                         <motion.div
                             initial={{ scale: 0.8, y: 50 }}
                             animate={{ scale: 1, y: 0 }}
-                            className="bg-white rounded-[3rem] p-8 md:p-12 max-w-2xl w-full flex flex-col items-center shadow-2xl border-8 border-pop-yellow"
+                            className="bg-white rounded-[3rem] p-8 md:p-12 max-w-2xl w-full flex flex-col items-center shadow-2xl border-8 border-pop-yellow my-auto"
                         >
 
                             {purchaseStage === 'confirm' && (
@@ -299,14 +325,24 @@ export default function ShopPage() {
                                         さんすう もんだい
                                     </h2>
 
-                                    <div className="text-4xl font-extrabold mb-8 flex flex-col items-center gap-4 w-full bg-blue-50 p-6 rounded-3xl">
-                                        <div className="flex justify-between w-full text-pop-blue">
-                                            <span>もっている おかね:</span>
-                                            <span>{points}</span>
+                                    <div className="text-3xl font-extrabold mb-8 flex flex-col items-center gap-6 w-full bg-blue-50 p-6 rounded-3xl">
+                                        <div className="flex justify-between w-full text-pop-blue items-center">
+                                            <div className="flex flex-col text-xl">
+                                                <span>もっている おかね:</span>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1">
+                                                <span>{points}</span>
+                                                {renderMoney(points)}
+                                            </div>
                                         </div>
-                                        <div className="flex justify-between w-full text-pop-red border-b-4 border-gray-400 pb-2">
-                                            <span>ひく (ねだん):</span>
-                                            <span>- {selectedItem.price}</span>
+                                        <div className="flex justify-between w-full text-pop-red border-b-4 border-gray-400 pb-4 items-center">
+                                            <div className="flex flex-col text-xl">
+                                                <span>ひく (ねだん):</span>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1">
+                                                <span>- {selectedItem.price}</span>
+                                                {renderMoney(selectedItem.price)}
+                                            </div>
                                         </div>
                                         <div className="flex justify-between w-full text-pop-green pt-2 items-center">
                                             <span>おつりは？</span>
@@ -324,6 +360,40 @@ export default function ShopPage() {
                                         <AppButton color="red" className="flex-1 text-2xl" onClick={() => { playSound('click'); setPurchaseStage('browse') }}>もどる</AppButton>
                                         <AppButton color="blue" className="flex-1 text-2xl" onClick={handleMathSubmit} disabled={userChangeInput === ""}>こたえる</AppButton>
                                     </div>
+                                </>
+                            )}
+
+                            {purchaseStage === 'wrong' && (
+                                <>
+                                    <h2 className="text-3xl font-bold text-pop-red mb-8 border-b-4 border-pop-red pb-4 w-full text-center">
+                                        おしい！
+                                    </h2>
+                                    <div className="text-2xl font-bold text-gray-700 mb-6 w-full bg-red-50 p-6 rounded-3xl text-center">
+                                        <p className="mb-4 text-xl">
+                                            きみのこたえ: <span className="text-pop-red">{userChangeInput}</span>
+                                        </p>
+                                        <p className="text-4xl mb-4">
+                                            せいかいは: <span className="text-pop-blue">{points - selectedItem.price}</span>
+                                        </p>
+
+                                        <div className="flex justify-center mb-4">
+                                            {renderMoney(points - selectedItem.price)}
+                                        </div>
+
+                                        <p className="text-sm text-gray-500 mt-4 leading-relaxed">
+                                            {points} から {selectedItem.price} を ひくと {points - selectedItem.price} に なるよ。<br />
+                                            つぎは がんばろう！<br />
+                                            （でも アイテムは 買えるよ！）
+                                        </p>
+                                    </div>
+                                    <AppButton color="blue" className="w-full text-2xl" onClick={() => {
+                                        playSound('levelUp');
+                                        removePoints(selectedItem.price);
+                                        addItem(selectedItem.type, selectedItem.id);
+                                        setPurchaseStage('success');
+                                    }}>
+                                        アイテムを もらう
+                                    </AppButton>
                                 </>
                             )}
 
