@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInventoryStore } from "@/store/useInventoryStore";
 import { usePlayerStore } from "@/store/usePlayerStore";
@@ -18,8 +18,31 @@ export default function CameraFriendPage() {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [userChangeInput, setUserChangeInput] = useState<string>("");
 
+    // Webcam state
+    const [useWebcam, setUseWebcam] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
     const PRICE = 100; // Cost to make a friend
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        let stream: MediaStream | null = null;
+        if (useWebcam && videoRef.current) {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+                .then(s => {
+                    stream = s;
+                    if (videoRef.current) videoRef.current.srcObject = s;
+                })
+                .catch(e => {
+                    console.error("Camera error:", e);
+                    alert("カメラにアクセスできませんでした");
+                    setUseWebcam(false);
+                });
+        }
+        return () => {
+            if (stream) stream.getTracks().forEach(t => t.stop());
+        };
+    }, [useWebcam]);
 
     const handleCaptureClick = () => {
         playSound('click');
@@ -36,34 +59,7 @@ export default function CameraFriendPage() {
             reader.onload = (event) => {
                 const img = new Image();
                 img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500;
-                    const MAX_HEIGHT = 500;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height = Math.round((height * MAX_WIDTH) / width);
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width = Math.round((width * MAX_HEIGHT) / height);
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx?.drawImage(img, 0, 0, width, height);
-
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-
-                    setImagePreview(compressedBase64);
-                    setStage('preview');
-                    speakJapanese("いい しゃしん だね！ ぽいんとを つかって おともだちに する？");
+                    drawToCanvas(img);
                 };
                 if (event.target?.result) {
                     img.src = event.target.result as string;
@@ -71,6 +67,47 @@ export default function CameraFriendPage() {
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const drawToCanvas = (source: HTMLImageElement | HTMLVideoElement) => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 500;
+        const MAX_HEIGHT = 500;
+        let width = source instanceof HTMLVideoElement ? source.videoWidth : source.width;
+        let height = source instanceof HTMLVideoElement ? source.videoHeight : source.height;
+
+        if (width > height) {
+            if (width > MAX_WIDTH) {
+                height = Math.round((height * MAX_WIDTH) / width);
+                width = MAX_WIDTH;
+            }
+        } else {
+            if (height > MAX_HEIGHT) {
+                width = Math.round((width * MAX_HEIGHT) / height);
+                height = MAX_HEIGHT;
+            }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        // Mirror image if it's from webcam (assuming front camera)
+        if (source instanceof HTMLVideoElement) {
+            ctx?.translate(width, 0);
+            ctx?.scale(-1, 1);
+        }
+        ctx?.drawImage(source, 0, 0, width, height);
+        // Reset transform to not affect future drawing
+        if (source instanceof HTMLVideoElement) {
+            ctx?.setTransform(1, 0, 0, 1, 0, 0);
+        }
+
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+        setImagePreview(compressedBase64);
+        setUseWebcam(false);
+        setStage('preview');
+        speakJapanese("いい しゃしん だね！ ぽいんとを つかって おともだちに する？");
     };
 
     const handleStartMath = () => {
@@ -173,25 +210,66 @@ export default function CameraFriendPage() {
                 />
 
                 <AnimatePresence mode="wait">
-                    {stage === 'capture' && (
+                    {stage === 'capture' && !useWebcam && (
                         <motion.div
-                            key="capture"
+                            key="capture-options"
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
+                            className="flex flex-col gap-6 w-full max-w-md items-center"
                         >
                             <AppButton
                                 color="red"
                                 size="xl"
-                                onClick={handleCaptureClick}
-                                className="flex flex-col items-center gap-6 py-16 px-24 bg-gradient-to-br from-pink-400 to-rose-600 shadow-pink-900 border-4 border-white"
+                                onClick={() => { playSound('click'); setUseWebcam(true); }}
+                                className="flex flex-col items-center gap-4 py-12 px-12 bg-gradient-to-br from-pink-400 to-rose-600 shadow-pink-900 border-4 border-white w-full"
                             >
-                                <Camera className="w-24 h-24" />
-                                <span className="text-4xl">しゃしん を とる</span>
+                                <Camera className="w-16 h-16" />
+                                <span className="text-3xl text-center">カメラで とる<br /><span className="text-lg">（PC / スマホ）</span></span>
                             </AppButton>
-                            <p className="text-gray-600 text-xl font-bold mt-8 text-center bg-white/50 p-4 rounded-full shadow-sm">
+
+                            <AppButton
+                                color="yellow"
+                                size="xl"
+                                onClick={handleCaptureClick}
+                                className="flex flex-col items-center gap-4 py-8 px-12 bg-gradient-to-br from-yellow-400 to-orange-500 shadow-orange-900 border-4 border-white w-full"
+                            >
+                                <span className="text-2xl">ファイルから えらぶ</span>
+                            </AppButton>
+
+                            <p className="text-gray-600 text-lg font-bold mt-4 text-center bg-white/50 p-4 rounded-3xl shadow-sm">
                                 じぶんの しゃしんや おきにいりの ものを とろう！<br />（MAX 20まい まで）
                             </p>
+                        </motion.div>
+                    )}
+
+                    {stage === 'capture' && useWebcam && (
+                        <motion.div
+                            key="webcam"
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="flex flex-col items-center w-full"
+                        >
+                            <div className="w-full max-w-lg mb-8 rounded-3xl overflow-hidden border-8 border-pink-400 shadow-xl relative bg-black aspect-square flex items-center justify-center">
+                                <video
+                                    ref={videoRef}
+                                    autoPlay
+                                    playsInline
+                                    className="w-full h-full object-cover transform -scale-x-100"
+                                />
+                            </div>
+                            <div className="flex gap-4 w-full max-w-lg">
+                                <AppButton color="red" className="flex-1 text-xl" onClick={() => { playSound('click'); setUseWebcam(false); }}>
+                                    もどる
+                                </AppButton>
+                                <AppButton color="red" className="flex-[2] text-2xl" onClick={() => {
+                                    playSound('correct');
+                                    if (videoRef.current) drawToCanvas(videoRef.current);
+                                }}>
+                                    はい チーズ！
+                                </AppButton>
+                            </div>
                         </motion.div>
                     )}
 

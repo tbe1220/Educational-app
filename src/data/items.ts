@@ -81,7 +81,7 @@ export const FRIENDS: GameItem[] = [
     { id: 'fr16', name: 'どくろ', type: 'friend', price: 300, emoji: '💀' },
     { id: 'fr17', name: 'あくま', type: 'friend', price: 500, emoji: '😈' },
     { id: 'fr18', name: 'おばけ', type: 'friend', price: 250, emoji: '👻' },
-    { id: 'fr19', name: 'どろぼう', type: 'friend', price: 350, emoji: '🥷' },
+    { id: 'fr19', name: 'どろぼう', type: 'friend', price: 350, emoji: '🦹' },
     { id: 'fr20', name: 'うちゅうじん', type: 'friend', price: 400, emoji: '👽' },
     { id: 'fr21', name: 'ぞんび', type: 'friend', price: 280, emoji: '🧟' },
 ];

@@ -33,9 +33,38 @@ const DraggableRoomItem = ({ instance, itemInfo, roomRef }: { instance: any, ite
                 touchAction: 'none'
             }}
             onDragEnd={() => {
+                const xVal = x.get();
+                const yVal = y.get();
+
+                // Bad guys trap hole feature
+                const BAD_GUY_IDS = ['fr16', 'fr17', 'fr18', 'fr19', 'fr20', 'fr21'];
+                if (BAD_GUY_IDS.includes(instance.itemId)) {
+                    const store = useInventoryStore.getState();
+                    const trapHoles = store.roomItems.filter((item: any) => item.itemId === 'f12');
+
+                    let fellIntoHole = false;
+                    for (const hole of trapHoles) {
+                        const dx = hole.x - xVal;
+                        const dy = hole.y - yVal;
+                        const distance = Math.hypot(dx, dy);
+                        // 80 pixels is a generous overlap radius for 100x100 items
+                        if (distance < 80) {
+                            fellIntoHole = true;
+                            break;
+                        }
+                    }
+
+                    if (fellIntoHole) {
+                        playSound('wrong');
+                        // Simulate falling in
+                        store.removeRoomItem(instance.id);
+                        return;
+                    }
+                }
+
                 playSound('click');
                 // Read the exact sub-pixel x/y from framer-motion to prevent jumping!
-                useInventoryStore.getState().moveRoomItem(instance.id, x.get(), y.get());
+                useInventoryStore.getState().moveRoomItem(instance.id, xVal, yVal);
             }}
             whileDrag={{ scale: 1.1, zIndex: 50 }}
             className="cursor-move drop-shadow-xl z-10 group"
